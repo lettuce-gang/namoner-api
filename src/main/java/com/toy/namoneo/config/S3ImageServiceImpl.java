@@ -22,6 +22,9 @@ import java.util.UUID;
 public class S3ImageServiceImpl implements ImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
     private final AmazonS3 amazonS3;
 
     @Override
@@ -52,6 +55,10 @@ public class S3ImageServiceImpl implements ImageService {
         return fileName;
     }
 
+    @Override
+    public String getFileUrl(String fileName) {
+        return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + fileName;
+    }
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }

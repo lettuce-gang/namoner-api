@@ -1,11 +1,10 @@
-package com.toy.namoneo.letter.controller.dto;
+package com.toy.namoneo.letter.controller.dto.request;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class LetterSendRequest {
-    private String toPhoneNumber;
+    private String recievePhoneNumber;
     private String letterSender;
     private String letterReceiver;
     private String text;

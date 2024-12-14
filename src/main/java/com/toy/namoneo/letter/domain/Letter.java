@@ -1,17 +1,15 @@
 package com.toy.namoneo.letter.domain;
 
-import com.toy.namoneo.letter.controller.dto.LetterSendRequest;
+import com.toy.namoneo.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoneo.user.domain.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class Letter {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

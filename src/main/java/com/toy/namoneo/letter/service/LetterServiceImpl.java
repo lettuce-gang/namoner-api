@@ -32,9 +32,9 @@ public class LetterServiceImpl implements LetterService {
     @Override
     @Transactional
     public void send(LetterSendRequest letterSendRequest, MultipartFile image) {
-        User recieveUser = userService.findByPhoneNumber(letterSendRequest.getRecievePhoneNumber()).orElseGet(() -> userService.craeteNotRegisteredUser(letterSendRequest.getRecievePhoneNumber()));
+        User recieveUser = userService.findByPhoneNumber(letterSendRequest.getReceiverPhoneNumber()).orElseGet(() -> userService.craeteNotRegisteredUser(letterSendRequest.getReceiverPhoneNumber()));
 
-        String imageUrl = image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
+        String imageUrl = image == null ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
 
         Letter letter = Letter.from(letterSendRequest, recieveUser, imageUrl);
 

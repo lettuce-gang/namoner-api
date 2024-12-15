@@ -6,8 +6,6 @@ import com.toy.namoneo.letter.domain.enums.LetterPaperType;
 import com.toy.namoneo.user.domain.User;
 import org.assertj.core.api.Assertions;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class LetterTest {
 
     public void createLetterByLetterSendRequest() {
@@ -19,7 +17,7 @@ class LetterTest {
         LetterPaperType letterPaperType = LetterPaperType.GRAPH_PAPER;
         FontType fontType = FontType.Pretendard_R;
         LetterSendRequest letterSendRequest = LetterSendRequest.builder()
-                .recievePhoneNumber(recievePhoneNumber)
+                .receiverPhoneNumber(recievePhoneNumber)
                 .letterSender(letterSender)
                 .letterReceiver(letterReceiver)
                 .message(message)

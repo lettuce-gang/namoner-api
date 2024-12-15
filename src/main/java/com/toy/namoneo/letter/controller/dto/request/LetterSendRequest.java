@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 public class LetterSendRequest {
-    private String recievePhoneNumber;
+    private String receiverPhoneNumber;
     private String letterSender;
     private String letterReceiver;
     private String message;

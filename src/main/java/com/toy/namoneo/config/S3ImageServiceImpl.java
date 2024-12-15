@@ -57,6 +57,9 @@ public class S3ImageServiceImpl implements ImageService {
 
     @Override
     public String getFileUrl(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            return null;
+        }
         return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + fileName;
     }
     private String createFileName(String fileName) {

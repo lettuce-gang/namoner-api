@@ -17,7 +17,7 @@ class LetterTest {
         String letterReceiver = "받은이";
         String message = "편지내용";
         LetterPaperType letterPaperType = LetterPaperType.GRAPH_PAPER;
-        FontType fontType = FontType.TEMP;
+        FontType fontType = FontType.Pretendard_R;
         LetterSendRequest letterSendRequest = LetterSendRequest.builder()
                 .recievePhoneNumber(recievePhoneNumber)
                 .letterSender(letterSender)

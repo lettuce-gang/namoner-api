@@ -18,7 +18,7 @@ public class LetterResponse {
                 .id(entity.getId())
                 .letterReceiver(entity.getLetterReceiver())
                 .letterSender(entity.getLetterSender())
-                .text(entity.getText())
+                .text(entity.getMessage())
                 .imageUrl(fullPathUrl)
                 .build();
     }

@@ -3,9 +3,12 @@ package com.toy.namoneo.letter.domain;
 import com.toy.namoneo.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoneo.letter.domain.enums.FontType;
 import com.toy.namoneo.letter.domain.enums.LetterPaperType;
+import com.toy.namoneo.letter.domain.enums.LetterType;
 import com.toy.namoneo.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -27,7 +30,11 @@ public class Letter {
     private String letterReceiver;
 
     private String message;
+    private LocalDateTime receiveDate;
+    private Boolean isRead;
 
+    @Enumerated(EnumType.STRING)
+    private LetterType letterType;
     @Enumerated(EnumType.STRING)
     private FontType fontType;
 

@@ -28,10 +28,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    private String postboxName;
+
     public static User craeteNotRegisteredUser(String phoneNumber) {
         return User.builder()
                 .phone(phoneNumber)
                 .status(UserStatus.NOT_SIGNED)
+                .postboxName(phoneNumber)
                 .build();
     }
 

@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,11 +30,13 @@ public class LetterServiceImpl implements LetterService {
     @Override
     @Transactional
     public void send(LetterSendRequest letterSendRequest, MultipartFile image) {
-        User recieveUser = userService.findOrCreateByPhoneNumber(letterSendRequest.getReceiverPhoneNumber());
+//        User recieveUser = userService.findOrCreateByPhoneNumber(letterSendRequest.getReceiverPhoneNumber());
+
+        User receiver = userService.findByUserId(letterSendRequest.getUserReceiver());
 
         String imageUrl = image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
 
-        Letter letter = Letter.from(letterSendRequest, recieveUser, imageUrl);
+        Letter letter = Letter.createBySend(letterSendRequest, receiver, imageUrl);
 
         letterRepository.save(letter);
     }

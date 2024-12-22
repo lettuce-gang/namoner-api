@@ -43,15 +43,18 @@ public class Letter {
 
     private String imageUrl;
 
-    public static Letter from(LetterSendRequest request, User userReceiver, String imagerUrl) {
+    public static Letter createBySend(LetterSendRequest request, User userReceiver, String imagerUrl) {
         return Letter.builder()
                 .userReceiver(userReceiver)
-                .letterReceiver(request.getLetterReceiver())
                 .letterSender(request.getLetterSender())
-                .imageUrl(imagerUrl)
+                .letterReceiver(request.getLetterReceiver())
                 .message(request.getMessage())
-                .fontType(request.getFontType())
                 .letterPaperType(request.getLetterPaperType())
+                .fontType(request.getFontType())
+                .letterType(request.getLetterType())
+                .receiveDate(request.getReceiveDate())
+                .imageUrl(imagerUrl)
+                .isRead(false)
                 .build();
     }
 

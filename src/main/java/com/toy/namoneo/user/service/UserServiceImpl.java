@@ -1,5 +1,7 @@
 package com.toy.namoneo.user.service;
 
+import com.toy.namoneo.common.exceptions.CommonBadRequestException;
+import com.toy.namoneo.common.exceptions.CommonResponseCode;
 import com.toy.namoneo.common.utils.PhoneNumberUtils;
 import com.toy.namoneo.user.domain.User;
 import com.toy.namoneo.user.repository.UserRepository;
@@ -49,7 +51,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUserId(String userId) {
-        return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findById(userId).orElseThrow(() -> {
+            String detailExceptionMessage = "User " + userId + " not found";
+            return new CommonBadRequestException(CommonResponseCode.ENTITY_NOT_FOUND, detailExceptionMessage);
+        });
     }
 
 }

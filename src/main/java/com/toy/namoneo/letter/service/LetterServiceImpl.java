@@ -32,7 +32,7 @@ public class LetterServiceImpl implements LetterService {
     @Override
     @Transactional
     public void send(LetterSendRequest letterSendRequest, MultipartFile image) {
-        User recieveUser = userService.findByPhoneNumber(letterSendRequest.getReceiverPhoneNumber()).orElseGet(() -> userService.craeteNotRegisteredUser(letterSendRequest.getReceiverPhoneNumber()));
+        User recieveUser = userService.findOrCreateByPhoneNumber(letterSendRequest.getReceiverPhoneNumber());
 
         String imageUrl = image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
 
@@ -44,13 +44,7 @@ public class LetterServiceImpl implements LetterService {
     @Override
     @Transactional(readOnly = true)
     public List<LetterListResponse> findLettersByPhone(String phoneNumber) {
-        Optional<User> byPhone = userService.findByPhoneNumber(phoneNumber);
-
-        if (byPhone.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        User user = byPhone.get();
+        User user = userService.findOrCreateByPhoneNumber(phoneNumber);
 
         return user.getReceiveLetters().stream().map(LetterListResponse::from).collect(Collectors.toList());
     }

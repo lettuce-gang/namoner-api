@@ -14,6 +14,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    public User findOrCreateByPhoneNumber(String phoneNumber) {
+        final String nmnSpecPhoneNumber = PhoneNumberUtils.convertPhoneNumberToNMNSpec(phoneNumber);
+
+        return userRepository.findByPhone(phoneNumber)
+                .orElseGet(() -> createNotRegisteredUser(nmnSpecPhoneNumber));
+    }
+    @Override
     public Optional<User> findByPhoneNumber(String phoneNumber) {
         phoneNumber = PhoneNumberUtils.convertPhoneNumberToNMNSpec(phoneNumber);
         return userRepository.findByPhone(phoneNumber);
@@ -32,7 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User craeteNotRegisteredUser(String phoneNumber) {
+    public User createNotRegisteredUser(String phoneNumber) {
         phoneNumber = PhoneNumberUtils.convertPhoneNumberToNMNSpec(phoneNumber);
         User user = User.craeteNotRegisteredUser(phoneNumber);
 

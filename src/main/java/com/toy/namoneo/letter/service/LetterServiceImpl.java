@@ -1,8 +1,11 @@
 package com.toy.namoneo.letter.service;
 
+import com.toy.namoneo.common.exceptions.CommonBadRequestException;
+import com.toy.namoneo.common.exceptions.CommonResponseCode;
 import com.toy.namoneo.config.ImageService;
 import com.toy.namoneo.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoneo.letter.controller.dto.response.LetterListResponse;
+import com.toy.namoneo.letter.controller.dto.response.LetterResponse;
 import com.toy.namoneo.letter.domain.Letter;
 import com.toy.namoneo.letter.repository.LetterRepository;
 import com.toy.namoneo.user.domain.User;
@@ -47,6 +50,24 @@ public class LetterServiceImpl implements LetterService {
         User user = userService.findByUserId(userId);
 
         return user.getReceiveLetters().stream().map(LetterListResponse::from).collect(Collectors.toList());
+    }
+
+    @Override
+    public Letter findById(String letterId) {
+        return letterRepository.findById(letterId).orElseThrow(() -> {
+            String detailDescription = "Letter " + letterId + " not found";
+            return new CommonBadRequestException(CommonResponseCode.ENTITY_NOT_FOUND, detailDescription);
+        });
+    }
+
+
+    @Override
+    public LetterResponse getLetterResponseByLetterId(String letterId) {
+        Letter letter = findById(letterId);
+
+        String imageUrl = imageService.getFileUrl(letter.getImageUrl());
+
+        return LetterResponse.from(letter, imageUrl);
     }
 
 }

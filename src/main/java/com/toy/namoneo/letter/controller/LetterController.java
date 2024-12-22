@@ -2,6 +2,7 @@ package com.toy.namoneo.letter.controller;
 
 import com.toy.namoneo.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoneo.letter.controller.dto.response.LetterListResponse;
+import com.toy.namoneo.letter.controller.dto.response.LetterResponse;
 import com.toy.namoneo.letter.service.LetterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,16 @@ public class LetterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LetterListResponse>> findLettersByUserId(@RequestParam("userId") String phone) {
-        List<LetterListResponse> letterListResponses = letterService.findLettersByUserId(phone);
+    public ResponseEntity<List<LetterListResponse>> findLettersByUserId(@RequestParam("userId") String userId) {
+        List<LetterListResponse> letterListResponses = letterService.findLettersByUserId(userId);
 
         return ResponseEntity.ok(letterListResponses);
+    }
+
+    @GetMapping("/{letterId}")
+    public ResponseEntity<LetterResponse> findByLetterId(@PathVariable("letterId") String letterId) {
+        LetterResponse letterResponse = letterService.getLetterResponseByLetterId(letterId);
+
+        return ResponseEntity.ok(letterResponse);
     }
 }

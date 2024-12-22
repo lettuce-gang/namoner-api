@@ -18,8 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +55,33 @@ public class LetterServiceImpl implements LetterService {
     public List<LetterListResponse> findLettersByUserId(String userId) {
         User user = userService.findByUserId(userId);
 
-        return user.getReceiveLetters().stream().map(LetterListResponse::from).collect(Collectors.toList());
+        List<Letter> sortedLetters = sortLetter(user.getReceiveLetters());
+
+        return sortedLetters.stream().map(LetterListResponse::from).collect(Collectors.toList());
+    }
+
+    private List<Letter> sortLetter(List<Letter> letters) {
+        List<Letter> reservedLetters = letters.stream()
+                .filter(letter -> !letter.getIsRead() && LetterType.RESERVED.equals(letter.getLetterType()))
+                .sorted(Comparator.comparing(Letter::getReceiveDate))
+                .collect(Collectors.toList());
+
+        List<Letter> notReadLetters = letters.stream()
+                .filter(letter -> !letter.getIsRead() && LetterType.NORMAL.equals(letter.getLetterType()))
+                .sorted(Comparator.comparing(Letter::getReceiveDate).reversed())
+                .collect(Collectors.toList());
+
+        List<Letter> readLetters = letters.stream()
+                .filter(letter -> letter.getIsRead())
+                .sorted(Comparator.comparing(Letter::getReceiveDate).reversed())
+                .collect(Collectors.toList());
+
+        List<Letter> ret = new ArrayList<>();
+        ret.addAll(notReadLetters);
+        ret.addAll(reservedLetters);
+        ret.addAll(readLetters);
+
+        return ret;
     }
 
     @Override

@@ -43,6 +43,37 @@ public class Letter {
 
     private String imageUrl;
 
+    public static Letter createNormalLetterType(LetterSendRequest request, User userReceiver, String imagerUrl) {
+        LocalDateTime now = LocalDateTime.now();
+
+        return Letter.builder()
+                .userReceiver(userReceiver)
+                .letterSender(request.getLetterSender())
+                .letterReceiver(request.getLetterReceiver())
+                .message(request.getMessage())
+                .letterPaperType(request.getLetterPaperType())
+                .fontType(request.getFontType())
+                .letterType(LetterType.NORMAL)
+                .receiveDate(now)
+                .imageUrl(imagerUrl)
+                .isRead(false)
+                .build();
+    }
+
+    public static Letter createReservedLetterType(LetterSendRequest request, User userReceiver, String imagerUrl) {
+        return Letter.builder()
+                .userReceiver(userReceiver)
+                .letterSender(request.getLetterSender())
+                .letterReceiver(request.getLetterReceiver())
+                .message(request.getMessage())
+                .letterPaperType(request.getLetterPaperType())
+                .fontType(request.getFontType())
+                .letterType(LetterType.RESERVED)
+                .receiveDate(request.getReceiveDate())
+                .imageUrl(imagerUrl)
+                .isRead(false)
+                .build();
+    }
     public static Letter createBySend(LetterSendRequest request, User userReceiver, String imagerUrl) {
         return Letter.builder()
                 .userReceiver(userReceiver)
@@ -51,7 +82,7 @@ public class Letter {
                 .message(request.getMessage())
                 .letterPaperType(request.getLetterPaperType())
                 .fontType(request.getFontType())
-                .letterType(request.getLetterType())
+                .letterType(LetterType.RESERVED)
                 .receiveDate(request.getReceiveDate())
                 .imageUrl(imagerUrl)
                 .isRead(false)

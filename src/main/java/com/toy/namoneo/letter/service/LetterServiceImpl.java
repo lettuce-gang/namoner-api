@@ -7,6 +7,7 @@ import com.toy.namoneo.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoneo.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoneo.letter.controller.dto.response.LetterResponse;
 import com.toy.namoneo.letter.domain.Letter;
+import com.toy.namoneo.letter.domain.enums.LetterType;
 import com.toy.namoneo.letter.repository.LetterRepository;
 import com.toy.namoneo.user.domain.User;
 import com.toy.namoneo.user.repository.UserRepository;
@@ -33,13 +34,15 @@ public class LetterServiceImpl implements LetterService {
     @Override
     @Transactional
     public void send(LetterSendRequest letterSendRequest, MultipartFile image) {
-//        User recieveUser = userService.findOrCreateByPhoneNumber(letterSendRequest.getReceiverPhoneNumber());
-
         User receiver = userService.findByUserId(letterSendRequest.getUserReceiver());
 
         String imageUrl = image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
 
-        Letter letter = Letter.createBySend(letterSendRequest, receiver, imageUrl);
+        Letter letter = switch (letterSendRequest.getLetterType()) {
+            case NORMAL -> Letter.createNormalLetterType(letterSendRequest, receiver, imageUrl);
+            case RESERVED -> Letter.createReservedLetterType(letterSendRequest, receiver, imageUrl);
+            default -> throw new CommonBadRequestException(CommonResponseCode.LETTER_TYPE_EXCEPTION);
+        };
 
         letterRepository.save(letter);
     }

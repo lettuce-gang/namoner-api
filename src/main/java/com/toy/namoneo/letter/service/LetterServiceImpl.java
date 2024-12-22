@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class LetterServiceImpl implements LetterService {
 
     private final ImageService imageService;
@@ -35,7 +36,6 @@ public class LetterServiceImpl implements LetterService {
     private final LetterRepository letterRepository;
 
     @Override
-    @Transactional
     public void send(LetterSendRequest letterSendRequest, MultipartFile image) {
         User receiver = userService.findByUserId(letterSendRequest.getUserReceiver());
 
@@ -86,10 +86,15 @@ public class LetterServiceImpl implements LetterService {
 
     @Override
     public Letter findById(String letterId) {
-        return letterRepository.findById(letterId).orElseThrow(() -> {
+        Letter letter = letterRepository.findById(letterId).orElseThrow(() -> {
             String detailDescription = "Letter " + letterId + " not found";
             return new CommonBadRequestException(CommonResponseCode.ENTITY_NOT_FOUND, detailDescription);
         });
+
+        letter.readLetter();
+        letterRepository.save(letter);
+
+        return letter;
     }
 
 

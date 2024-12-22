@@ -89,4 +89,8 @@ public class Letter {
                 .build();
     }
 
+    public void readLetter() {
+        this.isRead = true;
+    }
+
 }

@@ -9,5 +9,5 @@ import java.util.List;
 public interface LetterService {
     void send(LetterSendRequest letterSendRequest, MultipartFile image);
 
-    List<LetterListResponse> findLettersByPhone(String phone);
+    List<LetterListResponse> findLettersByUserId(String phone);
 }

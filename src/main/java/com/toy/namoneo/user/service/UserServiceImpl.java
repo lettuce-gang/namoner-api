@@ -3,6 +3,7 @@ package com.toy.namoneo.user.service;
 import com.toy.namoneo.common.utils.PhoneNumberUtils;
 import com.toy.namoneo.user.domain.User;
 import com.toy.namoneo.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,11 @@ public class UserServiceImpl implements UserService {
         User user = User.craeteNotRegisteredUser(phoneNumber);
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public User findByUserId(String userId) {
+        return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
     }
 
 }

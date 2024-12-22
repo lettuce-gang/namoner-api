@@ -43,8 +43,8 @@ public class LetterServiceImpl implements LetterService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<LetterListResponse> findLettersByPhone(String phoneNumber) {
-        User user = userService.findOrCreateByPhoneNumber(phoneNumber);
+    public List<LetterListResponse> findLettersByUserId(String userId) {
+        User user = userService.findByUserId(userId);
 
         return user.getReceiveLetters().stream().map(LetterListResponse::from).collect(Collectors.toList());
     }

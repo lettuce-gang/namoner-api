@@ -12,4 +12,6 @@ public interface UserService {
     int getLettersCountByPhoneNumber(String phoneNumber);
 
     User createNotRegisteredUser(String phoneNumber);
+
+    User findByUserId(String userId);
 }

@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     public User findOrCreateByPhoneNumber(String phoneNumber) {
         final String nmnSpecPhoneNumber = PhoneNumberUtils.convertPhoneNumberToNMNSpec(phoneNumber);
 
-        return userRepository.findByPhone(phoneNumber)
+        return userRepository.findByPhone(nmnSpecPhoneNumber)
                 .orElseGet(() -> createNotRegisteredUser(nmnSpecPhoneNumber));
     }
     @Override

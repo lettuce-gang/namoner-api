@@ -1,6 +1,8 @@
 package com.toy.namoner.common.exceptions;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -14,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ControllerAdvice {
 
 	@ExceptionHandler(Throwable.class)
-	public Response<Void> exceptionHandler(Throwable throwable, HttpServletRequest request) {
+	public ResponseEntity<Response<Void>> exceptionHandler(Throwable throwable, HttpServletRequest request) {
 		TraceErrorException exception;
 
 		if (throwable instanceof TraceErrorException) {
@@ -23,9 +25,11 @@ public class ControllerAdvice {
 			exception = new TraceErrorException(HttpStatus.INTERNAL_SERVER_ERROR, throwable);
 		}
 
-		log.error("[{}] Error occurred while processing request. method: {}, uri: {}", exception.getTraceCode(),
-			request.getMethod(), request.getRequestURI(), exception);
+		HttpStatus statusCode = ObjectUtils.defaultIfNull(exception.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+		log.error("[{}] Error occurred while processing request. statusCode: {}, uri: {}", exception.getTraceCode(),
+			statusCode, request.getRequestURI(), exception);
 
-		return Response.error(exception);
+		return ResponseEntity.status(statusCode)
+			.body(Response.error(exception));
 	}
 }

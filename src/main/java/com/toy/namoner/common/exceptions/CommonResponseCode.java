@@ -1,8 +1,9 @@
 package com.toy.namoner.common.exceptions;
 
 public enum CommonResponseCode {
-    ENTITY_NOT_FOUND(4000, "Entity Not Found"),
-    LETTER_TYPE_EXCEPTION(4001, "LetterType shoud be in (NORMAL, RESERVED)"),
+    COMMON_BAD_REQUEST(4000, "Bad Request"),
+    ENTITY_NOT_FOUND(4001, "Entity Not Found"),
+    LETTER_TYPE_EXCEPTION(4002, "LetterType shoud be in (NORMAL, RESERVED)"),
     ;
     private int code;
     private String description;

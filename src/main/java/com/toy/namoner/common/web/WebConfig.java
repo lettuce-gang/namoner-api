@@ -16,15 +16,15 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**");
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        //todo 정식 배포 시 수정 필요
-        registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("Authorization", "Content-Type")
-                .exposedHeaders("Custom-Header")
-                .allowCredentials(true)
-                .maxAge(3600);
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        //todo 정식 배포 시 수정 필요
+//        registry.addMapping("/**")
+//                .allowedOriginPatterns("*")
+//                .allowedMethods("GET", "POST", "PUT", "DELETE")
+//                .allowedHeaders("Authorization", "Content-Type")
+//                .exposedHeaders("Custom-Header")
+//                .allowCredentials(true)
+//                .maxAge(3600);
+//    }
 }

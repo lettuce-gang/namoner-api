@@ -1,6 +1,7 @@
 package com.toy.namoner.user.domain;
 
 import com.toy.namoner.letter.domain.Letter;
+import com.toy.namoner.user.domain.enums.UserRole;
 import com.toy.namoner.user.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,6 +19,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     private String phone;
     @OneToMany(mappedBy = "userSender")
     private List<Letter> sendLetters = new ArrayList<>();
@@ -30,6 +34,8 @@ public class User {
 
     private String postboxName;
 
+
+
     public static User craeteNotRegisteredUser(String phoneNumber) {
         return User.builder()
                 .phone(phoneNumber)
@@ -41,6 +47,10 @@ public class User {
 
     public int getReceiveLettersCount() {
         return receiveLetters.size();
+    }
+
+    public boolean isFirstLoginUser() {
+        return UserStatus.NOT_SIGNED == status;
     }
 
 

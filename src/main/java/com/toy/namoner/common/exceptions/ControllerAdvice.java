@@ -1,34 +1,31 @@
 package com.toy.namoner.common.exceptions;
 
-import com.toy.namoner.common.exceptions.dto.BadRequestBodyDto;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.toy.namoner.common.model.Response;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
 public class ControllerAdvice {
 
-    @ExceptionHandler(CommonBadRequestException.class)
-    public ResponseEntity<BadRequestBodyDto> commonBadRequestException(CommonBadRequestException exception, HttpServletRequest request) {
-        CommonResponseCode responseCode = exception.getResponseCode();
+	@ExceptionHandler(Throwable.class)
+	public Response<Void> exceptionHandler(Throwable throwable, HttpServletRequest request) {
+		TraceErrorException exception;
 
-        BadRequestBodyDto responseBody = BadRequestBodyDto.builder()
-                .code(responseCode.getCode())
-                .description(responseCode.getDescription())
-                .detailDescription(exception.getDetailDescription())
-                .build();
+		if (throwable instanceof TraceErrorException) {
+			exception = (TraceErrorException)throwable;
+		} else {
+			exception = new TraceErrorException(HttpStatus.INTERNAL_SERVER_ERROR, throwable);
+		}
 
-        log.info("Bad Request! IN {} {} \n" +
-                "CODE : {} \n" +
-                "DESCRIPTION: {} \n" +
-                "DETAIL_DESCRIPTION: {}",
-                request.getMethod(), request.getRequestURI(),
-                responseBody.getCode(), responseBody.getDescription(), responseBody.getDetailDescription()
-        );
+		log.error("[{}] Error occurred while processing request. method: {}, uri: {}", exception.getTraceCode(),
+			request.getMethod(), request.getRequestURI(), exception);
 
-        return ResponseEntity.badRequest().body(responseBody);
-    }
+		return Response.error(exception);
+	}
 }

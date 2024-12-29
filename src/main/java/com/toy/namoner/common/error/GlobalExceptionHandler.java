@@ -1,4 +1,4 @@
-package com.toy.namoner.common.exceptions;
+package com.toy.namoner.common.error;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.HttpStatus;
@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.toy.namoner.common.error.exceptions.TraceErrorException;
 import com.toy.namoner.common.model.Response;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
-public class ControllerAdvice {
+public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Throwable.class)
 	public ResponseEntity<Response<Void>> exceptionHandler(Throwable throwable, HttpServletRequest request) {

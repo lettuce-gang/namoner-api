@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.toy.namoner.common.exceptions.EntityNotFoundException;
-import com.toy.namoner.common.exceptions.IllegalLetterTypeException;
+import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
+import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterResponse;
@@ -18,7 +18,6 @@ import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import com.toy.namoner.domain.letter.repository.LetterRepository;
 import com.toy.namoner.domain.user.model.User;
-import com.toy.namoner.domain.user.repository.UserRepository;
 import com.toy.namoner.domain.user.service.UserService;
 import com.toy.namoner.infra.service.ImageService;
 

@@ -1,4 +1,4 @@
-package com.toy.namoner.common.exceptions;
+package com.toy.namoner.common.error.exceptions;
 
 import org.springframework.http.HttpStatus;
 

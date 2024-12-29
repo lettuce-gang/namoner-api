@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.toy.namoner.common.exceptions.EntityNotFoundException;
+import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
 import com.toy.namoner.common.utils.PhoneNumberUtils;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.repository.UserRepository;

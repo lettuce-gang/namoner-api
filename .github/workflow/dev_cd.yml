@@ -54,4 +54,4 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           envs: GITHUB_SHA
           script: |
-            ./deploy.sh ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_IMAGE_NAME }} ${GITHUB_SHA::7}
+            ./namoner-server-config/dev/app/deploy.sh ${{ secrets.DOCKER_USERNAME }} ${{ secrets.DOCKER_IMAGE_NAME }} ${GITHUB_SHA::7}

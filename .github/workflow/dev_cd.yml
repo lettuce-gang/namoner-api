@@ -1,4 +1,4 @@
-name: Dev_Deploy
+name: Dev_CD
 
 on:
   push:

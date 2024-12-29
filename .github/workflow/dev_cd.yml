@@ -1,0 +1,65 @@
+name: Dev_CD
+
+on:
+  push:
+    branches: [ "dev-deploy" ]
+
+permissions:
+  contents: read
+
+env:
+  DOCKER_IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  SERVER_HOST: ${{ secrets.SERVER_HOST }}
+  SERVER_USERNAME: ${{ secrets.SERVER_USERNAME }}
+  SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+  SHA: ${GITHUB_SHA::7}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2.4.2
+        with:
+          arguments: build
+
+      - name: Docker build
+        run: |
+          docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:$SHA\
+                       -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest .
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: $DOCKER_USERNAME
+          password: $DOCKER_PASSWORD
+
+      - name: Docker push
+        run: |
+          docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:$SHA
+          docker push $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: $SERVER_HOST
+          username: $SERVER_USERNAME
+          password: $SERVER_PASSWORD
+          script: |
+            ./deploy.sh $DOCKER_USERNAME $DOCKER_IMAGE_NAME $SHA

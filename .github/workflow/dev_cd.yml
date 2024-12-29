@@ -53,6 +53,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    environment: dev
     needs: build
     steps:
       - name: SSH Remote Commands

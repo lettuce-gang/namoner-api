@@ -1,10 +1,11 @@
 package com.toy.namoner.letter.domain;
 
-import com.toy.namoner.letter.controller.dto.request.LetterSendRequest;
-import com.toy.namoner.letter.domain.enums.FontType;
-import com.toy.namoner.letter.domain.enums.LetterPaperType;
-import com.toy.namoner.letter.domain.enums.LetterType;
-import com.toy.namoner.user.domain.User;
+import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
+import com.toy.namoner.domain.letter.model.Letter;
+import com.toy.namoner.domain.letter.model.enums.FontType;
+import com.toy.namoner.domain.letter.model.enums.LetterPaperType;
+import com.toy.namoner.domain.letter.model.enums.LetterType;
+import com.toy.namoner.domain.user.model.User;
 import org.assertj.core.api.Assertions;
 
 import java.time.LocalDateTime;

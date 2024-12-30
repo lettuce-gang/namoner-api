@@ -1,11 +1,12 @@
 package com.toy.namoner.letter.service;
 
-import com.toy.namoner.letter.controller.dto.response.LetterListResponse;
-import com.toy.namoner.letter.domain.Letter;
-import com.toy.namoner.letter.domain.enums.LetterType;
-import com.toy.namoner.letter.repository.LetterRepository;
-import com.toy.namoner.user.domain.User;
-import com.toy.namoner.user.service.UserService;
+import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
+import com.toy.namoner.domain.letter.model.Letter;
+import com.toy.namoner.domain.letter.model.enums.LetterType;
+import com.toy.namoner.domain.letter.repository.LetterRepository;
+import com.toy.namoner.domain.letter.service.LetterServiceImpl;
+import com.toy.namoner.domain.user.model.User;
+import com.toy.namoner.domain.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

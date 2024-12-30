@@ -13,7 +13,7 @@ public class TestController {
 		return new TestModel("test", 1);
 	}
 
-	@GetMapping("/error")
+	@GetMapping("/err")
 	public void error() {
 		throw new RuntimeException("error");
 	}

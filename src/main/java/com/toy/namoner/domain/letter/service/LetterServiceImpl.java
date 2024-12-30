@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.toy.namoner.common.exceptions.EntityNotFoundException;
 import com.toy.namoner.common.exceptions.IllegalLetterTypeException;
+import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
+import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterResponse;

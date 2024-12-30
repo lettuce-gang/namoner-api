@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,23 +26,27 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
-        public static final String PERMITTED_URI[] = {"/api/auth/**", "/login"};
     private static final String PERMITTED_ROLES[] = {UserRole.ADMIN.getValue(), UserRole.USER.getValue()};
-//    private final CustomCorsConfigurationSource customCorsConfigurationSource;
     private final JwtService jwtService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        String[] array = PermittedUrls.getPermittedGetMethodUrls().toArray(new String[0]);
+        for (String s : array) {
+            System.out.println(s);
+        }
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
                 .cors(cors -> cors.configurationSource(customCorsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/admin/**").hasRole(UserRole.ADMIN.getValue())
-                        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .requestMatchers(PERMITTED_URI).permitAll()
-                        .anyRequest().hasAnyRole(PERMITTED_ROLES)
+                                .requestMatchers("/api/admin/**").hasRole(UserRole.ADMIN.getValue())
+                                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                                .requestMatchers(PermittedUrls.getPermittedAllMethodUrls().toArray(new String[0])).permitAll()
+                                .requestMatchers(HttpMethod.POST, PermittedUrls.getPermittedPostMethodUrls().toArray(new String[0])).permitAll()
+                                .requestMatchers(HttpMethod.GET, PermittedUrls.getPermittedGetMethodUrls().toArray(new String[0])).permitAll()
+                                .anyRequest().hasAnyRole(PERMITTED_ROLES)
                 )
                 .sessionManagement(configurer -> configurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

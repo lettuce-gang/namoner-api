@@ -56,6 +56,7 @@ public class JwtUtils {
         return claims;
     }
     public static boolean isValidToken(String token, Key secretKey) {
+        if (token == null) return false;
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)

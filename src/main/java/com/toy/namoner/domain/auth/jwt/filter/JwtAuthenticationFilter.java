@@ -2,6 +2,7 @@ package com.toy.namoner.domain.auth.jwt.filter;
 
 import com.toy.namoner.domain.auth.jwt.JwtService;
 import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.domain.auth.jwt.PermittedUrls;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,9 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-import static com.toy.namoner.domain.auth.jwt.SecurityConfig.PERMITTED_URI;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -25,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // 이게 필요한가?
-        if (isPermittedURI(request.getRequestURI())) {
+        if (PermittedUrls.isPermittedUrl(request.getMethod(), request.getRequestURI())) {
             SecurityContextHolder.getContext().setAuthentication(null);
             filterChain.doFilter(request, response);
             return;
@@ -41,14 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         throw new AuthorizationException("Access token is not valid");
-    }
-
-    private boolean isPermittedURI(String requestURI) {
-        return Arrays.stream(PERMITTED_URI)
-                .anyMatch(permitted -> {
-                    String replace = permitted.replace("*", "");
-                    return requestURI.contains(replace) || replace.contains(requestURI);
-                });
     }
 
     private void setAuthenticationToContext(String accessToken) {

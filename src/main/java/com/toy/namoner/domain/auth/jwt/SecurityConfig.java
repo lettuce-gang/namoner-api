@@ -1,9 +1,5 @@
 package com.toy.namoner.domain.auth.jwt;
 
-import com.toy.namoner.domain.auth.jwt.filter.ExceptionHandlerFilter;
-import com.toy.namoner.domain.auth.jwt.filter.JwtAuthenticationFilter;
-import com.toy.namoner.domain.user.model.enums.UserRole;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -20,6 +16,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.toy.namoner.domain.auth.jwt.filter.ExceptionHandlerFilter;
+import com.toy.namoner.domain.auth.jwt.filter.JwtAuthenticationFilter;
+import com.toy.namoner.domain.user.model.enums.UserRole;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @Order(1)

@@ -18,7 +18,6 @@ import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import com.toy.namoner.domain.letter.repository.LetterRepository;
 import com.toy.namoner.domain.user.model.User;
-import com.toy.namoner.domain.user.repository.UserRepository;
 import com.toy.namoner.domain.user.service.UserService;
 import com.toy.namoner.infra.service.ImageService;
 

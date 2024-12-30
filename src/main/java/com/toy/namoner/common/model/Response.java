@@ -2,11 +2,10 @@ package com.toy.namoner.common.model;
 
 import java.time.Instant;
 
-import com.toy.namoner.common.exceptions.TraceErrorException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.toy.namoner.common.error.exceptions.TraceErrorException;
+import com.toy.namoner.common.exceptions.TraceErrorException;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

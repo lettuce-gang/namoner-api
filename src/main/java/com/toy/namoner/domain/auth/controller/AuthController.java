@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class authController {
+public class AuthController {
 
     private final OAuthService naverOAuthService;
 

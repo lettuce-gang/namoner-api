@@ -2,10 +2,13 @@ package com.toy.namoner.domain.auth.service.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 @Builder
 public class OAuthUserInfo {
 
-    private String phoneNum;
+    private final String phoneNum;
 }

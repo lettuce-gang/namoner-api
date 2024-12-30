@@ -2,17 +2,19 @@ package com.toy.namoner.domain.auth.clients.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class NaverTokenApiResponse {
-//    @JsonProperty("access_token")
-    private String access_token;
-    private String refresh_token;
-    private String token_type;
-    private String expires_in;
+    private final String access_token;
+    private final String refresh_token;
+    private final String token_type;
+    private final String expires_in;
 
-    private String error;
-    private String error_description;
+    private final String error;
+    private final String error_description;
 
     public boolean isError() {
         return error != null;

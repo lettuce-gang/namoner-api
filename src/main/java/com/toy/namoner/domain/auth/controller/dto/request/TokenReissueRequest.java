@@ -1,8 +1,11 @@
 package com.toy.namoner.domain.auth.controller.dto.request;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class TokenReissueRequest {
-    private String refreshToken;
+    private final String refreshToken;
 }

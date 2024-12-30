@@ -5,16 +5,19 @@ import com.toy.namoner.domain.letter.model.enums.FontType;
 import com.toy.namoner.domain.letter.model.enums.LetterPaperType;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 @Builder
 public class LetterResponse {
-    private String letterReceiver;
-    private String letterSender;
-    private String message;
-    private String imageUrl;
-    private FontType fontType;
-    private LetterPaperType letterPaperType;
+    private final String letterReceiver;
+    private final String letterSender;
+    private final String message;
+    private final String imageUrl;
+    private final FontType fontType;
+    private final LetterPaperType letterPaperType;
 
     public static LetterResponse from(Letter letter, String fullPathImageUrl) {
         return LetterResponse.builder()

@@ -2,14 +2,17 @@ package com.toy.namoner.domain.auth.controller.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 @Builder
 public class LoginResponse {
-    private String accessToken;
-    private String refreshToken;
+    private final String accessToken;
+    private final String refreshToken;
 
-    private Boolean isFirstVisit;
+    private final Boolean isFirstVisit;
 
     public static LoginResponse createFirstLoginResponse(String accessToken, String refreshToken) {
         return LoginResponse.builder()

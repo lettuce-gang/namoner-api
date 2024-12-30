@@ -4,11 +4,14 @@ import com.toy.namoner.domain.user.model.User;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 @Builder
 public class PostBoxResponse {
-    private String postboxName;
+    private final String postboxName;
 
     public static PostBoxResponse from(User user) {
         return PostBoxResponse.builder()

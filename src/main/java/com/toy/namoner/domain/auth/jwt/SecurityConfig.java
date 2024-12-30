@@ -31,10 +31,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        String[] array = PermittedUrls.getPermittedGetMethodUrls().toArray(new String[0]);
-        for (String s : array) {
-            System.out.println(s);
-        }
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)

@@ -2,14 +2,17 @@ package com.toy.namoner.domain.auth.clients.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class NaverProfileUserInfoResponse {
 
-    private String id;
+    private final String id;
 
-    private String mobile;
+    private final String mobile;
 
     @JsonProperty("mobile_e164")
-    private String mobileE164;
+    private final String mobileE164;
 }

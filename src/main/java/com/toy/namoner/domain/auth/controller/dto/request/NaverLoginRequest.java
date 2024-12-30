@@ -1,12 +1,14 @@
 package com.toy.namoner.domain.auth.controller.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class NaverLoginRequest {
-    private String code;
-    private String state;
-
-
+    private final String code;
+    private final String state;
 
 }

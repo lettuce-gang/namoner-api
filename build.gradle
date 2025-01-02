@@ -34,25 +34,31 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-	// Apache Commons
-	implementation 'org.apache.commons:commons-lang3:3.12.0'
-	implementation 'commons-io:commons-io:2.14.0'
-	implementation 'org.apache.commons:commons-collections4:4.4'
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-	// lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    // Apache Commons
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'commons-io:commons-io:2.14.0'
+    implementation 'org.apache.commons:commons-collections4:4.4'
 
-	// db connector
-	runtimeOnly 'com.h2database:h2'
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // db connector
+    runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {

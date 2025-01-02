@@ -5,19 +5,22 @@ import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 @Builder
 public class LetterListResponse {
-    private String id;
-    private String letterReceiver;
-    private String letterSender;
+    private final String id;
+    private final String letterReceiver;
+    private final String letterSender;
     @JsonFormat(pattern = "yyyy.MM.dd hh:mm")
-    private LocalDateTime receiveDate;
-    private LetterType letterType;
-    private Boolean isRead;
+    private final LocalDateTime receiveDate;
+    private final LetterType letterType;
+    private final Boolean isRead;
 
     public static LetterListResponse from(Letter entity) {
         return LetterListResponse.builder()

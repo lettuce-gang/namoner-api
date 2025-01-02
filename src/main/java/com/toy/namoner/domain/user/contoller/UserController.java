@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.user.contoller;
 
+import com.toy.namoner.domain.user.contoller.dto.response.UserIdResponse;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
 import com.toy.namoner.domain.user.contoller.dto.response.PostBoxResponse;
@@ -25,9 +26,9 @@ public class UserController {
         return ResponseEntity.ok(PostBoxResponse.from(user));
     }
     @GetMapping("/phone/{phoneNumber}")
-    public ResponseEntity<String> getUserIdByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
+    public ResponseEntity<UserIdResponse> getUserIdByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
         User user = userService.findOrCreateByPhoneNumber(phoneNumber);
 
-        return ResponseEntity.ok(user.getId());
+        return ResponseEntity.ok(UserIdResponse.from(user.getId()));
     }
 }

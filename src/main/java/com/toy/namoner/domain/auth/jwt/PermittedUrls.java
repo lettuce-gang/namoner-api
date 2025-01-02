@@ -23,6 +23,7 @@ public class PermittedUrls {
 
     public static List<String> getPermittedGetMethodUrls() {
         return List.of(
+                "/monitor",
                 "/users/postbox/**",
                 "/users/phone/**"
         );

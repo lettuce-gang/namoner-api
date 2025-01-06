@@ -40,6 +40,7 @@ public class User {
                 .phone(phoneNumber)
                 .status(UserStatus.NOT_SIGNED)
                 .postboxName(phoneNumber)
+                .role(UserRole.USER)
                 .build();
     }
 

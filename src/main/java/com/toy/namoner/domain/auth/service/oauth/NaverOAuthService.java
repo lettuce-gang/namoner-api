@@ -10,12 +10,14 @@ import com.toy.namoner.domain.auth.service.AuthService;
 import com.toy.namoner.domain.auth.service.dto.OAuthUserInfo;
 import com.toy.namoner.common.exceptions.AuthorizationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NaverOAuthService implements OAuthService {
     private final NaverTokenApiClient naverTokenApiClient;
 
@@ -35,6 +37,8 @@ public class NaverOAuthService implements OAuthService {
         NaverTokenApiResponse token = tokenResponse.getBody();
 
         if (token.isError()) {
+            log.error("Naver Token API returns error \n error: {} \n error_description: {}", token.getError(), token.getError_description());
+
             throw new AuthorizationException("NAVER Token API returns error");
         }
 

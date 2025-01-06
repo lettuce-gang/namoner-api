@@ -3,7 +3,7 @@ package com.toy.namoner.domain.auth.controller;
 import com.toy.namoner.domain.auth.controller.dto.request.NaverLoginRequest;
 import com.toy.namoner.domain.auth.controller.dto.request.TokenReissueRequest;
 import com.toy.namoner.domain.auth.controller.dto.response.LoginResponse;
-import com.toy.namoner.domain.auth.controller.dto.response.NMNTokenResponse;
+import com.toy.namoner.domain.auth.controller.dto.response.NMNToken;
 import com.toy.namoner.domain.auth.jwt.JwtService;
 import com.toy.namoner.domain.auth.service.oauth.OAuthService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ public class AuthController {
 
     private final JwtService jwtService;
     @PostMapping("/reissue")
-    public ResponseEntity<NMNTokenResponse> reissueToken(@RequestBody TokenReissueRequest request) {
-        NMNTokenResponse response = jwtService.reissueToken(request);
+    public ResponseEntity<NMNToken> reissueToken(@RequestBody TokenReissueRequest request) {
+        NMNToken response = jwtService.reissueToken(request);
 
         return ResponseEntity.ok(response);
     }

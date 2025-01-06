@@ -25,7 +25,9 @@ public class PermittedUrls {
         return List.of(
                 "/monitor",
                 "/users/postbox/**",
-                "/users/phone/**"
+                "/users/phone/**",
+                "/swagger-ui/**",
+                "/v3/api-docs/**"
         );
     }
 

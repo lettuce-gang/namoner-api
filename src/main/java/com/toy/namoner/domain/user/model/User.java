@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.user.model;
 
+import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.model.enums.UserStatus;
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.user.model.enums.UserRole;
@@ -35,6 +36,8 @@ public class User {
 
     private String postboxName;
 
+    private Boolean isPhoneConnected;
+
     public static User craeteNotRegisteredUser(String phoneNumber) {
         return User.builder()
                 .phone(phoneNumber)
@@ -53,4 +56,9 @@ public class User {
     }
 
 
+    public void firstUpdateUserInfo(UserInfoUpdateRequest updateInfo) {
+        postboxName = updateInfo.getPostBoxName();
+        isPhoneConnected = updateInfo.getIsPhoneConnected();
+        status = UserStatus.SIGNED;
+    }
 }

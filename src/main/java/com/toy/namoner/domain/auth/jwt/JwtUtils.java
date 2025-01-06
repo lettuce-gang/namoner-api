@@ -10,7 +10,6 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.security.sasl.AuthenticationException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
@@ -18,25 +17,25 @@ import java.util.*;
 @Slf4j
 public class JwtUtils {
 
-    public static String generateAccessToken(final Key ACCESS_KEY, long ACCESS_EXPIRATION, User user) {
+    public static String generateAccessToken(final Key ACCESS_KEY, Date expiration, User user) {
         Long now = System.currentTimeMillis();
 
         return Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(user))
                 .setSubject(String.valueOf(user.getId()))
-                .setExpiration(new Date(now + ACCESS_EXPIRATION))
+                .setExpiration(expiration)
                 .signWith(ACCESS_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public static String generateRefreshToken(final Key REFRESH_KEY, final long REFRESH_EXPIRATION, User user) {
+    public static String generateRefreshToken(final Key REFRESH_KEY, Date expiration, User user) {
         Long now = System.currentTimeMillis();
 
         return Jwts.builder()
                 .setHeader(createHeader())
                 .setSubject(user.getId())
-                .setExpiration(new Date(now + REFRESH_EXPIRATION))
+                .setExpiration(expiration)
                 .signWith(REFRESH_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }

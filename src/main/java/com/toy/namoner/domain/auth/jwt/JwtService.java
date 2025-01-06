@@ -1,7 +1,7 @@
 package com.toy.namoner.domain.auth.jwt;
 
 import com.toy.namoner.domain.auth.controller.dto.request.TokenReissueRequest;
-import com.toy.namoner.domain.auth.controller.dto.response.NMNTokenResponse;
+import com.toy.namoner.domain.auth.controller.dto.response.NMNToken;
 import com.toy.namoner.common.exceptions.AuthorizationException;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 @Service
 public class JwtService {
@@ -23,7 +26,7 @@ public class JwtService {
     private final long ACCESS_EXPIRATION;
     private final long REFRESH_EXPIRATION;
 
-    private final String COOKIE_ACCESS_KEY = "accessToken";
+    private final String COOKIE_ACCESS_KEY = "Authorization";
 
     public JwtService(
             CustomUserDetailService customUserDetailService,
@@ -41,20 +44,39 @@ public class JwtService {
         this.REFRESH_EXPIRATION = refreshTokenExpiration;
     }
 
+    public NMNToken generateToken(User user) {
+        Date now = new Date();
 
-    public String generateAccessToken(User user) {
-        return JwtUtils.generateAccessToken(ACCESS_SECRET_KEY, ACCESS_EXPIRATION, user);
+        String accessToken = generateAccessToken(user, now);
+        String refreshToken = generateRefreshToken(user, now);
+        LocalDateTime accessTokenExpiredTime =
+                new Date(now.getTime() + ACCESS_EXPIRATION)
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        return NMNToken.create(accessToken, refreshToken, accessTokenExpiredTime);
     }
 
-    public String generateRefreshToken(User user) {
+    public String generateAccessToken(User user, Date baseTime) {
+        Date expiration = new Date(baseTime.getTime() + ACCESS_EXPIRATION);
+        return JwtUtils.generateAccessToken(ACCESS_SECRET_KEY, expiration, user);
+    }
+
+    public String generateRefreshToken(User user, Date baseTime) {
         // TODO refreshToken 생성 시 user별 token 저장 로직 필요
-        return JwtUtils.generateRefreshToken(REFRESH_SECRET_KEY, REFRESH_EXPIRATION, user);
+        Date expiration = new Date(baseTime.getTime() + REFRESH_EXPIRATION);
+        return JwtUtils.generateRefreshToken(REFRESH_SECRET_KEY, expiration, user);
     }
 
     public String resolveAccessTokenFromHeader(HttpServletRequest request) {
-        String accessToken = request.getHeader(COOKIE_ACCESS_KEY);
+        String headerValue = request.getHeader(COOKIE_ACCESS_KEY);
 
-        return accessToken;
+        if (headerValue != null && headerValue.startsWith("Bearer ")) {
+            return headerValue.substring(7);
+        }
+
+        return null;
     }
 
     public boolean validateAccessToken(String accessToken) {
@@ -82,7 +104,7 @@ public class JwtService {
         return JwtUtils.getUserId(refreshToken, REFRESH_SECRET_KEY);
     }
 
-    public NMNTokenResponse reissueToken(TokenReissueRequest request) {
+    public NMNToken reissueToken(TokenReissueRequest request) {
         String refreshToken = request.getRefreshToken();
 
         if (!validateRefreshToken(refreshToken)) {
@@ -92,9 +114,6 @@ public class JwtService {
         String userId = getUserIdFromRefreshToken(refreshToken);
         User user = userService.findByUserId(userId);
 
-        String accessToken = generateAccessToken(user);
-        refreshToken = generateRefreshToken(user);
-
-        return NMNTokenResponse.create(accessToken, refreshToken, ACCESS_EXPIRATION);
+        return generateToken(user);
     }
 }

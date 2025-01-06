@@ -2,6 +2,8 @@ package com.toy.namoner.domain.user.service;
 
 import java.util.Optional;
 
+import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.domain.user.contoller.dto.response.UserInfoUpdateResponse;
 import org.springframework.stereotype.Service;
 
 import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
@@ -49,5 +51,16 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findById(userId)
 			.orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found"));
 	}
+
+    @Override
+    public UserInfoUpdateResponse update(String userId, UserInfoUpdateRequest updateInfo) {
+		User user = userRepository.findById(userId).get();
+
+		user.firstUpdateUserInfo(updateInfo);
+
+		userRepository.save(user);
+
+		return UserInfoUpdateResponse.from(user);
+    }
 
 }

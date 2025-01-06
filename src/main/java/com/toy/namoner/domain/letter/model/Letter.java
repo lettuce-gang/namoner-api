@@ -1,15 +1,26 @@
 package com.toy.namoner.domain.letter.model;
 
+import java.time.LocalDateTime;
+
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.model.enums.FontType;
 import com.toy.namoner.domain.letter.model.enums.LetterPaperType;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import com.toy.namoner.domain.user.model.User;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDateTime;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Builder

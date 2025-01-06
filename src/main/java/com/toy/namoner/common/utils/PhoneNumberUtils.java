@@ -1,9 +1,9 @@
 package com.toy.namoner.common.utils;
 
-import io.micrometer.common.util.StringUtils;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.micrometer.common.util.StringUtils;
 
 public class PhoneNumberUtils {
     private static final String PHONE_NUMBER_REGEX =

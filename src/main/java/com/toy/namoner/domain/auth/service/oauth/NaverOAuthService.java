@@ -1,5 +1,10 @@
 package com.toy.namoner.domain.auth.service.oauth;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.toy.namoner.common.exceptions.AuthorizationException;
 import com.toy.namoner.domain.auth.clients.NaverProfileApiClient;
 import com.toy.namoner.domain.auth.clients.NaverTokenApiClient;
 import com.toy.namoner.domain.auth.clients.dto.response.NaverProfileApiResponse;
@@ -8,12 +13,9 @@ import com.toy.namoner.domain.auth.controller.dto.request.NaverLoginRequest;
 import com.toy.namoner.domain.auth.controller.dto.response.LoginResponse;
 import com.toy.namoner.domain.auth.service.AuthService;
 import com.toy.namoner.domain.auth.service.dto.OAuthUserInfo;
-import com.toy.namoner.common.exceptions.AuthorizationException;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

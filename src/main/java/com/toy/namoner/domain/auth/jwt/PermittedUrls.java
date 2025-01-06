@@ -1,9 +1,9 @@
 package com.toy.namoner.domain.auth.jwt;
 
+import java.util.List;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;
-
-import java.util.List;
 
 public class PermittedUrls {
 

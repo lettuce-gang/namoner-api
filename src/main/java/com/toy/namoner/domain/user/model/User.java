@@ -1,15 +1,25 @@
 package com.toy.namoner.domain.user.model;
 
-import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
-import com.toy.namoner.domain.user.model.enums.UserStatus;
-import com.toy.namoner.domain.letter.model.Letter;
-import com.toy.namoner.domain.user.model.enums.UserRole;
-
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.toy.namoner.domain.letter.model.Letter;
+import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.domain.user.model.enums.UserRole;
+import com.toy.namoner.domain.user.model.enums.UserStatus;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "nmn_user")
 @Builder

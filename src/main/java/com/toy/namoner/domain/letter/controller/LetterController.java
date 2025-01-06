@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.letter.controller;
 
+import com.toy.namoner.common.handler.NamonerResponse;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterResponse;
@@ -19,12 +20,14 @@ public class LetterController {
 
     private final LetterService letterService;
 
+    @NamonerResponse
     @PostMapping
     public ResponseEntity send(@RequestPart(name = "letterInfo") LetterSendRequest letterSendRequest, @RequestPart(required = false, name = "image") MultipartFile image) {
         letterService.send(letterSendRequest, image);
         return ResponseEntity.ok(null);
     }
 
+    @NamonerResponse
     @GetMapping
     public ResponseEntity<List<LetterListResponse>> findLettersByUserId(@RequestParam("userId") String userId) {
         List<LetterListResponse> letterListResponses = letterService.findLettersByUserId(userId);
@@ -32,6 +35,7 @@ public class LetterController {
         return ResponseEntity.ok(letterListResponses);
     }
 
+    @NamonerResponse
     @GetMapping("/{letterId}")
     public ResponseEntity<LetterResponse> findByLetterId(@PathVariable("letterId") String letterId) {
         LetterResponse letterResponse = letterService.getLetterResponseByLetterId(letterId);

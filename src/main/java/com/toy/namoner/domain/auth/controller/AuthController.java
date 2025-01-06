@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.auth.controller;
 
+import com.toy.namoner.common.handler.NamonerResponse;
 import com.toy.namoner.domain.auth.controller.dto.request.NaverLoginRequest;
 import com.toy.namoner.domain.auth.controller.dto.request.TokenReissueRequest;
 import com.toy.namoner.domain.auth.controller.dto.response.LoginResponse;
@@ -19,14 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final OAuthService naverOAuthService;
-
     private final JwtService jwtService;
+
+    @NamonerResponse
     @PostMapping("/reissue")
     public ResponseEntity<NMNToken> reissueToken(@RequestBody TokenReissueRequest request) {
         NMNToken response = jwtService.reissueToken(request);
 
         return ResponseEntity.ok(response);
     }
+
+    @NamonerResponse
     @PostMapping("/naver")
     public ResponseEntity<Object> naverLogin(@RequestBody NaverLoginRequest request) {
         LoginResponse response = naverOAuthService.getUserInfo(request);

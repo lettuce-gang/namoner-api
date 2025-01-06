@@ -1,6 +1,7 @@
 package com.toy.namoner.domain.user.contoller;
 
 import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.common.handler.NamonerResponse;
 import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.contoller.dto.response.UserIdResponse;
 import com.toy.namoner.domain.user.contoller.dto.response.UserInfoUpdateResponse;
@@ -22,6 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
+    @NamonerResponse
     @GetMapping("/postbox/{userId}")
     public ResponseEntity<PostBoxResponse> getPostBoxResponse(@PathVariable("userId") String userId) {
         User user = userService.findByUserId(userId);
@@ -29,6 +31,7 @@ public class UserController {
         return ResponseEntity.ok(PostBoxResponse.from(user));
     }
 
+    @NamonerResponse
     @GetMapping("/phone/{phoneNumber}")
     public ResponseEntity<UserIdResponse> getUserIdByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
         User user = userService.findOrCreateByPhoneNumber(phoneNumber);
@@ -36,6 +39,7 @@ public class UserController {
         return ResponseEntity.ok(UserIdResponse.from(user.getId()));
     }
 
+    @NamonerResponse
     @PostMapping("/info")
     public UserInfoUpdateResponse updateUserInfo(@RequestBody UserInfoUpdateRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

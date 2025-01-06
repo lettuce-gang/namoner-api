@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.user.contoller;
+package com.toy.namoner.domain.user.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.toy.namoner.common.exceptions.AuthorizationException;
 import com.toy.namoner.common.handler.NamonerResponse;
-import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
-import com.toy.namoner.domain.user.contoller.dto.response.PostBoxResponse;
-import com.toy.namoner.domain.user.contoller.dto.response.UserIdResponse;
-import com.toy.namoner.domain.user.contoller.dto.response.UserInfoUpdateResponse;
+import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
 

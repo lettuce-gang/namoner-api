@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.user.contoller.dto.request;
+package com.toy.namoner.domain.user.controller.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

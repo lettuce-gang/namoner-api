@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
 import com.toy.namoner.common.utils.PhoneNumberUtils;
-import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
-import com.toy.namoner.domain.user.contoller.dto.response.UserInfoUpdateResponse;
+import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.repository.UserRepository;
 

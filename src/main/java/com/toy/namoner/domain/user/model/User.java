@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.toy.namoner.domain.letter.model.Letter;
-import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.model.enums.UserRole;
 import com.toy.namoner.domain.user.model.enums.UserStatus;
 

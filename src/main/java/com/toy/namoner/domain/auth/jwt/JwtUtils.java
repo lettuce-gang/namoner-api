@@ -16,6 +16,7 @@ import java.util.*;
 
 @Slf4j
 public class JwtUtils {
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     public static String generateAccessToken(final Key ACCESS_KEY, Date expiration, User user) {
         Long now = System.currentTimeMillis();

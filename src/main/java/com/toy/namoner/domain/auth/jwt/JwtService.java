@@ -26,8 +26,6 @@ public class JwtService {
     private final long ACCESS_EXPIRATION;
     private final long REFRESH_EXPIRATION;
 
-    private final String COOKIE_ACCESS_KEY = "Authorization";
-
     public JwtService(
             CustomUserDetailService customUserDetailService,
             UserService userService,
@@ -70,7 +68,7 @@ public class JwtService {
     }
 
     public String resolveAccessTokenFromHeader(HttpServletRequest request) {
-        String headerValue = request.getHeader(COOKIE_ACCESS_KEY);
+        String headerValue = request.getHeader(JwtUtils.AUTHORIZATION_HEADER);
 
         if (headerValue != null && headerValue.startsWith("Bearer ")) {
             return headerValue.substring(7);

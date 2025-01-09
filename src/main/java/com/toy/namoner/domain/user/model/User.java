@@ -1,12 +1,12 @@
 package com.toy.namoner.domain.user.model;
 
+import com.toy.namoner.domain.user.model.enums.UserStatus;
+import com.toy.namoner.domain.letter.model.Letter;
+import com.toy.namoner.domain.auth.role.UserRole;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
-import com.toy.namoner.domain.user.model.enums.UserRole;
-import com.toy.namoner.domain.user.model.enums.UserStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

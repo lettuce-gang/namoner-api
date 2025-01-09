@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -74,11 +73,16 @@ public class JwtService {
 		return JwtUtils.isValidToken(accessToken, getAccessSecretKey());
 	}
 
-	public Authentication getAuthentication(String token) {
-		UserDetails principal = customUserDetailService.loadUserByUsername(
-			JwtUtils.getUserId(token, getAccessSecretKey()));
-		return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
-	}
+    public Authentication getAuthentication(String token) {
+        UserDetails principal = customUserDetailService.loadUserByUsername(JwtUtils.getUserId(token, getAccessSecretKey()));
+        User user = userService.findByUserId(principal.getUsername());
+
+        return NMNAuthenticationImpl.create(user);
+    }
+
+    public Authentication getAnonymousAuthentication() {
+        return NMNAuthenticationImpl.createAnonymous();
+    }
 
 	public boolean validateRefreshToken(String refreshToken) {
 		if (!JwtUtils.isValidToken(refreshToken, getRefreshSecretKey())) {

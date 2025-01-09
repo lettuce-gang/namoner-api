@@ -19,7 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.toy.namoner.domain.auth.jwt.filter.ExceptionHandlerFilter;
 import com.toy.namoner.domain.auth.jwt.filter.JwtAuthenticationFilter;
-import com.toy.namoner.domain.user.model.enums.UserRole;
+import com.toy.namoner.domain.auth.role.UserRole;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,17 +37,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
-                .cors(cors -> cors.configurationSource(customCorsConfigurationSource()))
-                .authorizeHttpRequests(request -> request
-                                .requestMatchers("/api/admin/**").hasRole(UserRole.ADMIN.getValue())
-                                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                                .requestMatchers(PermittedUrls.getPermittedAllMethodUrls().toArray(new String[0])).permitAll()
-                                .requestMatchers(HttpMethod.POST, PermittedUrls.getPermittedPostMethodUrls().toArray(new String[0])).permitAll()
-                                .requestMatchers(HttpMethod.GET, PermittedUrls.getPermittedGetMethodUrls().toArray(new String[0])).permitAll()
-                                .anyRequest().hasAnyRole(PERMITTED_ROLES)
-                )
                 .sessionManagement(configurer -> configurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> cors.configurationSource(customCorsConfigurationSource()))
                 // JWT 검증 필터 추가
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService),
                         UsernamePasswordAuthenticationFilter.class)

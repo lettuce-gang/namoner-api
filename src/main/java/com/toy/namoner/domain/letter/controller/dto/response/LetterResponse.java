@@ -3,8 +3,8 @@ package com.toy.namoner.domain.letter.controller.dto.response;
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.FontType;
 import com.toy.namoner.domain.letter.model.enums.LetterPaperType;
+
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

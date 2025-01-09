@@ -1,9 +1,9 @@
 package com.toy.namoner.domain.auth.jwt;
 
+import java.util.List;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.util.AntPathMatcher;
-
-import java.util.List;
 
 public class PermittedUrls {
 
@@ -25,7 +25,9 @@ public class PermittedUrls {
         return List.of(
                 "/monitor",
                 "/users/postbox/**",
-                "/users/phone/**"
+                "/users/phone/**",
+                "/swagger-ui/**",
+                "/v3/api-docs/**"
         );
     }
 

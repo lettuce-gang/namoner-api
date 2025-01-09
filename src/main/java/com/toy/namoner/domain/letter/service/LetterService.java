@@ -1,12 +1,13 @@
 package com.toy.namoner.domain.letter.service;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterResponse;
 import com.toy.namoner.domain.letter.model.Letter;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface LetterService {
     void send(LetterSendRequest letterSendRequest, MultipartFile image);

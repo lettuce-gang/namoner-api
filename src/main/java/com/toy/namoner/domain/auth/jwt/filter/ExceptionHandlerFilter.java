@@ -1,13 +1,16 @@
 package com.toy.namoner.domain.auth.jwt.filter;
 
-import com.toy.namoner.common.exceptions.AuthorizationException;
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 import org.apache.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import com.toy.namoner.common.exceptions.AuthorizationException;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 

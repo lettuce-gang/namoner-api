@@ -1,10 +1,10 @@
 package com.toy.namoner.domain.user.service;
 
-import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
-import com.toy.namoner.domain.user.contoller.dto.response.UserInfoUpdateResponse;
-import com.toy.namoner.domain.user.model.User;
-
 import java.util.Optional;
+
+import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
+import com.toy.namoner.domain.user.model.User;
 
 public interface UserService {
     User findOrCreateByPhoneNumber(String phoneNumber);

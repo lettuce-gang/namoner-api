@@ -1,10 +1,11 @@
 package com.toy.namoner.domain.auth.clients;
 
-import com.toy.namoner.domain.auth.clients.dto.response.NaverTokenApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 import org.springframework.web.service.annotation.HttpExchange;
+
+import com.toy.namoner.domain.auth.clients.dto.response.NaverTokenApiResponse;
 
 @HttpExchange
 public interface NaverTokenApiClient {

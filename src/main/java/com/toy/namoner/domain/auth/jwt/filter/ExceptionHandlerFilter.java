@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.common.handler.NamonerResponse;
 import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;

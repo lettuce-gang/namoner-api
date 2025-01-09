@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.domain.user.model.User;
 
 import io.jsonwebtoken.ExpiredJwtException;

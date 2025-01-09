@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.domain.auth.jwt.JwtService;
 import com.toy.namoner.domain.auth.jwt.PermittedUrls;
 

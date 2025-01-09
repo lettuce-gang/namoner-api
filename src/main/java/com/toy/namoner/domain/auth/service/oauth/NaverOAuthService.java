@@ -1,11 +1,10 @@
 package com.toy.namoner.domain.auth.service.oauth;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.toy.namoner.common.AppEnvironment;
-import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.domain.auth.clients.NaverProfileApiClient;
 import com.toy.namoner.domain.auth.clients.NaverTokenApiClient;
 import com.toy.namoner.domain.auth.clients.dto.response.NaverProfileApiResponse;

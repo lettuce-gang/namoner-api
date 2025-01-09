@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.toy.namoner.common.AppEnvironment;
-import com.toy.namoner.common.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.domain.auth.controller.dto.request.TokenReissueRequest;
 import com.toy.namoner.domain.auth.controller.dto.response.NMNToken;
 import com.toy.namoner.domain.user.model.User;

@@ -1,6 +1,5 @@
 package com.toy.namoner.common.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,29 +7,25 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.toy.namoner.common.AppEnvironment;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class AwsS3Config {
 
-    @Value("${cloud.aws.credentials.access-key}") // application.yml 에 명시한 내용
-    private String accessKey;
+	private final AppEnvironment env;
 
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String secretKey;
-
-    @Value("${cloud.aws.region.static}")
-    private String region;
-
-    @Bean
-    public AmazonS3Client amazonS3Client() {
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-        return (AmazonS3Client) AmazonS3ClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .build();
-    }
+	@Bean
+	public AmazonS3Client amazonS3Client() {
+		BasicAWSCredentials awsCredentials = new BasicAWSCredentials(env.getAccessKey(), env.getSecretKey());
+		return (AmazonS3Client)AmazonS3ClientBuilder.standard()
+			.withRegion(env.getS3Region())
+			.withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+			.build();
+	}
 
 }

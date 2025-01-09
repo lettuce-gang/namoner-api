@@ -3,7 +3,7 @@ package com.toy.namoner.domain.user.model;
 import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.model.enums.UserStatus;
 import com.toy.namoner.domain.letter.model.Letter;
-import com.toy.namoner.domain.user.model.enums.UserRole;
+import com.toy.namoner.domain.auth.role.UserRole;
 
 import jakarta.persistence.*;
 import lombok.*;

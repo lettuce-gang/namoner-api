@@ -7,7 +7,6 @@ import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -85,7 +84,13 @@ public class JwtService {
 
     public Authentication getAuthentication(String token) {
         UserDetails principal = customUserDetailService.loadUserByUsername(JwtUtils.getUserId(token, ACCESS_SECRET_KEY));
-        return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
+        User user = userService.findByUserId(principal.getUsername());
+
+        return NMNAuthenticationImpl.create(user);
+    }
+
+    public Authentication getAnonymousAuthentication() {
+        return NMNAuthenticationImpl.createAnonymous();
     }
 
 

@@ -1,7 +1,16 @@
 package com.toy.namoner.domain.auth.jwt;
 
-import com.toy.namoner.common.exceptions.AuthorizationException;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.domain.user.model.User;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,12 +19,9 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.*;
-
 @Slf4j
 public class JwtUtils {
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     public static String generateAccessToken(final Key ACCESS_KEY, Date expiration, User user) {
         Long now = System.currentTimeMillis();

@@ -1,8 +1,8 @@
 package com.toy.namoner.infra.service;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
     public static final String LETTER_IMAGE_DIR = "letter";

@@ -1,14 +1,14 @@
 package com.toy.namoner.domain.letter.controller.dto.request;
 
+import java.time.LocalDateTime;
+
 import com.toy.namoner.domain.letter.model.enums.FontType;
 import com.toy.namoner.domain.letter.model.enums.LetterPaperType;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
+
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor

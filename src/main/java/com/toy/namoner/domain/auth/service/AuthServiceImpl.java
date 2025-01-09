@@ -1,14 +1,15 @@
 package com.toy.namoner.domain.auth.service;
 
+import org.springframework.stereotype.Service;
+
 import com.toy.namoner.domain.auth.controller.dto.response.LoginResponse;
 import com.toy.namoner.domain.auth.controller.dto.response.NMNToken;
 import com.toy.namoner.domain.auth.jwt.JwtService;
 import com.toy.namoner.domain.auth.service.dto.OAuthUserInfo;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

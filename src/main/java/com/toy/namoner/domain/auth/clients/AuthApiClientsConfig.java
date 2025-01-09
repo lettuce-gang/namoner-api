@@ -1,11 +1,12 @@
 package com.toy.namoner.domain.auth.clients;
 
-import com.toy.namoner.common.logs.httpInterface.LoggingExchangeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+
+import com.toy.namoner.common.logs.httpInterface.LoggingExchangeFilter;
 
 @Configuration
 public class AuthApiClientsConfig {

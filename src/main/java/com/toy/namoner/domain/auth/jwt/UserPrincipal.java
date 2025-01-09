@@ -1,12 +1,13 @@
 package com.toy.namoner.domain.auth.jwt;
 
-import com.toy.namoner.domain.user.model.User;
+import java.util.Collection;
+import java.util.Collections;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
+import com.toy.namoner.domain.user.model.User;
 
 public class UserPrincipal implements UserDetails {
     private User user;

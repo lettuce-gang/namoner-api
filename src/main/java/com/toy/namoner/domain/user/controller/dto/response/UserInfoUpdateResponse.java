@@ -1,6 +1,7 @@
-package com.toy.namoner.domain.user.contoller.dto.response;
+package com.toy.namoner.domain.user.controller.dto.response;
 
 import com.toy.namoner.domain.user.model.User;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

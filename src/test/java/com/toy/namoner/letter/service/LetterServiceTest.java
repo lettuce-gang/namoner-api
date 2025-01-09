@@ -4,7 +4,7 @@ import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import com.toy.namoner.domain.letter.repository.LetterRepository;
-import com.toy.namoner.domain.letter.service.LetterServiceImpl;
+import com.toy.namoner.domain.letter.service.LetterService;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-class LetterServiceImplTest {
+class LetterServiceTest {
     @Mock
     private UserService userService;
 
@@ -28,7 +28,7 @@ class LetterServiceImplTest {
     private LetterRepository letterRepository;
 
     @InjectMocks
-    private LetterServiceImpl letterService;
+    private LetterService letterService;
 
     @BeforeEach
     void setUp() {

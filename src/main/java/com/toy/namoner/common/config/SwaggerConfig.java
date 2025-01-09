@@ -2,7 +2,7 @@ package com.toy.namoner.common.config;
 
 import org.springframework.context.annotation.Configuration;
 
-import com.toy.namoner.domain.auth.jwt.JwtUtils;
+import com.toy.namoner.common.jwt.JwtUtils;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;

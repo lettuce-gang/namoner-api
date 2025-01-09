@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.jwt.filter;
+package com.toy.namoner.common.jwt.filter;
 
 import java.io.IOException;
 

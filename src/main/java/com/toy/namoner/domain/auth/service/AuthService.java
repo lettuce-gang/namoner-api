@@ -1,9 +1,31 @@
 package com.toy.namoner.domain.auth.service;
 
+import org.springframework.stereotype.Service;
+
 import com.toy.namoner.domain.auth.controller.dto.response.LoginResponse;
-import com.toy.namoner.domain.auth.service.dto.OAuthUserInfo;
+import com.toy.namoner.domain.auth.controller.dto.response.NMNToken;
+import com.toy.namoner.common.jwt.JwtService;
+import com.toy.namoner.infra.service.dto.OAuthUserInfo;
+import com.toy.namoner.domain.user.model.User;
+import com.toy.namoner.domain.user.service.UserService;
 
-public interface AuthService {
+import lombok.RequiredArgsConstructor;
 
-    LoginResponse loginByOAuthInfo(OAuthUserInfo info);
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+
+	private final UserService userService;
+	private final JwtService jwtService;
+
+	public LoginResponse loginByOAuthInfo(OAuthUserInfo info) {
+		User user = userService.findOrCreateByPhoneNumber(info.getPhoneNum());
+
+		NMNToken nmnToken = jwtService.generateToken(user);
+
+		return user.isFirstLoginUser()
+			? LoginResponse.createFirstLoginResponse(nmnToken, user)
+			: LoginResponse.createLoginResponse(nmnToken, user);
+	}
+
 }

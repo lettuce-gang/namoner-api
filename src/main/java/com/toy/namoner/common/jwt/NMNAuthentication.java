@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.jwt;
+package com.toy.namoner.common.jwt;
 
 import com.toy.namoner.domain.auth.role.UserRole;
 import org.springframework.security.core.Authentication;

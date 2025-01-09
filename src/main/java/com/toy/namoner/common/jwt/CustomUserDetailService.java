@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.jwt;
+package com.toy.namoner.common.jwt;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

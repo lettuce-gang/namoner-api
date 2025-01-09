@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.clients.dto.response;
+package com.toy.namoner.infra.client.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

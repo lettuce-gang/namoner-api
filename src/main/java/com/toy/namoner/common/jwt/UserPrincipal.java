@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.jwt;
+package com.toy.namoner.common.jwt;
 
 import java.util.Collection;
 import java.util.Collections;

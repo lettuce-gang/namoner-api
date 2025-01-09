@@ -1,9 +1,8 @@
-package com.toy.namoner.domain.auth.jwt;
+package com.toy.namoner.common.jwt;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,11 +13,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.toy.namoner.domain.auth.jwt.filter.ExceptionHandlerFilter;
-import com.toy.namoner.domain.auth.jwt.filter.JwtAuthenticationFilter;
+import com.toy.namoner.common.jwt.filter.ExceptionHandlerFilter;
+import com.toy.namoner.common.jwt.filter.JwtAuthenticationFilter;
 import com.toy.namoner.domain.auth.role.UserRole;
 
 import lombok.RequiredArgsConstructor;

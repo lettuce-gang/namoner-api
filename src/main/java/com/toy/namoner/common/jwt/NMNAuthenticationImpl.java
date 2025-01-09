@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.jwt;
+package com.toy.namoner.common.jwt;
 
 import com.toy.namoner.domain.auth.role.UserRoleConstants;
 import com.toy.namoner.domain.user.model.User;

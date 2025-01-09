@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.toy.namoner.common.handler.NamonerResponse;
+import com.toy.namoner.common.jwt.JwtService;
 import com.toy.namoner.domain.auth.controller.dto.request.NaverLoginRequest;
 import com.toy.namoner.domain.auth.controller.dto.request.TokenReissueRequest;
 import com.toy.namoner.domain.auth.controller.dto.response.LoginResponse;
 import com.toy.namoner.domain.auth.controller.dto.response.NMNToken;
-import com.toy.namoner.domain.auth.jwt.JwtService;
-import com.toy.namoner.domain.auth.service.oauth.OAuthService;
+import com.toy.namoner.infra.service.OAuthService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.clients;
+package com.toy.namoner.infra.client;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

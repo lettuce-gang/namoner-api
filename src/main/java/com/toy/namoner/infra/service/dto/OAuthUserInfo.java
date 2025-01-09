@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.service.dto;
+package com.toy.namoner.infra.service.dto;
 
 import lombok.Builder;
 import lombok.Getter;

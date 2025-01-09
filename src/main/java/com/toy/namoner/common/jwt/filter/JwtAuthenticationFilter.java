@@ -1,6 +1,7 @@
-package com.toy.namoner.domain.auth.jwt.filter;
+package com.toy.namoner.common.jwt.filter;
 
-import com.toy.namoner.domain.auth.jwt.JwtService;
+import com.toy.namoner.common.jwt.JwtService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

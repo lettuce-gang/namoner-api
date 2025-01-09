@@ -1,4 +1,4 @@
-package com.toy.namoner.infra.service;
+package com.toy.namoner.infra.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,12 +16,13 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.toy.namoner.common.AppEnvironment;
+import com.toy.namoner.infra.service.ImageService;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class S3ImageServiceImpl implements ImageService {
+public class S3ImageService implements ImageService {
 
 	private final AppEnvironment env;
 	private final AmazonS3 amazonS3;

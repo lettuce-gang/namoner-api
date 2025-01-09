@@ -1,4 +1,4 @@
-package com.toy.namoner.domain.auth.jwt;
+package com.toy.namoner.common.jwt;
 
 import java.security.Key;
 import java.time.LocalDateTime;

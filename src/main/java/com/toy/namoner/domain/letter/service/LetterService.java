@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.domain.auth.role.UserRole;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,15 +35,18 @@ public class LetterService {
 	private final UserService userService;
 	private final LetterRepository letterRepository;
 
-	public void send(LetterSendRequest letterSendRequest, MultipartFile image) {
-		User receiver = userService.findByUserId(letterSendRequest.getUserReceiver());
+	public void send(NMNAuthentication authentication, LetterSendRequest letterSendRequest, MultipartFile image) {
+		User userReceiver = userService.findByUserId(letterSendRequest.getUserReceiver());
 
 		String imageUrl =
 			image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
 
+		User userSender =
+				authentication.getUserRole() == UserRole.GUEST ? null : userService.findByUserId(authentication.getUserId());
+
 		Letter letter = switch (letterSendRequest.getLetterType()) {
-			case LetterType.NORMAL -> Letter.createNormalLetterType(letterSendRequest, receiver, imageUrl);
-			case LetterType.RESERVED -> Letter.createReservedLetterType(letterSendRequest, receiver, imageUrl);
+			case LetterType.NORMAL -> Letter.createNormalLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
+			case LetterType.RESERVED -> Letter.createReservedLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
 		};
 
 		letterRepository.save(letter);

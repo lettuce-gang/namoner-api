@@ -1,7 +1,9 @@
 package com.toy.namoner.domain.letter.controller;
 
+import java.security.Principal;
 import java.util.List;
 
+import com.toy.namoner.common.jwt.NMNAuthentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,9 +36,11 @@ public class LetterController {
 	 */
 	@NamonerResponse
 	@PostMapping
-	public void send(@RequestPart(name = "letterInfo") LetterSendRequest letterSendRequest,
-		@RequestPart(required = false, name = "image") MultipartFile image) {
-		letterService.send(letterSendRequest, image);
+	public void send(
+			NMNAuthentication authentication,
+			@RequestPart(name = "letterInfo") LetterSendRequest letterSendRequest,
+			@RequestPart(required = false, name = "image") MultipartFile image) {
+		letterService.send(authentication, letterSendRequest, image);
 	}
 
 	/**

@@ -56,11 +56,12 @@ public class Letter extends BaseEntity {
 
     private String imageUrl;
 
-    public static Letter createNormalLetterType(LetterSendRequest request, User userReceiver, String imagerUrl) {
+    public static Letter createNormalLetterType(LetterSendRequest request, User userReceiver, User userSender, String imagerUrl) {
         LocalDateTime now = LocalDateTime.now();
 
         return Letter.builder()
                 .userReceiver(userReceiver)
+                .userSender(userSender)
                 .letterSender(request.getLetterSender())
                 .letterReceiver(request.getLetterReceiver())
                 .message(request.getMessage())
@@ -73,9 +74,10 @@ public class Letter extends BaseEntity {
                 .build();
     }
 
-    public static Letter createReservedLetterType(LetterSendRequest request, User userReceiver, String imagerUrl) {
+    public static Letter createReservedLetterType(LetterSendRequest request, User userReceiver, User userSender, String imagerUrl) {
         return Letter.builder()
                 .userReceiver(userReceiver)
+                .userSender(userSender)
                 .letterSender(request.getLetterSender())
                 .letterReceiver(request.getLetterReceiver())
                 .message(request.getMessage())

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.toy.namoner.common.error.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
 import com.toy.namoner.common.error.exceptions.LetterReplyUserSenderNullPointException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.auth.role.UserRole;
@@ -50,7 +51,7 @@ public class LetterService {
 		Letter letter = switch (letterSendRequest.getLetterType()) {
 			case LetterType.NORMAL -> Letter.createNormalLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
 			case LetterType.RESERVED -> Letter.createReservedLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
-			default -> throw new IllegalArgumentException("Unexpected value: " + letterSendRequest.getLetterType());
+			default -> throw new IllegalLetterTypeException();
 		};
 
 		letterRepository.save(letter);

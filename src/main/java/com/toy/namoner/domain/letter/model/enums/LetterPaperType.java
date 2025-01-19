@@ -2,7 +2,7 @@ package com.toy.namoner.domain.letter.model.enums;
 
 public enum LetterPaperType {
     GRAPH_PAPER("모눈종이"), BASIC_NOTE("유선노트"), PHOTO_POSTCARD("포토엽서"), POLAROID("폴라로이드"),
-    CHECK_PATTERN("체크무늬"),
+    CHECK_PAPER("체크무늬"),
     ;
 
     private String description;

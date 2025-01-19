@@ -108,4 +108,11 @@ public class Letter extends BaseEntity {
         this.isRead = true;
     }
 
+    public boolean checkUserReceiver(User user) {
+        return this.userReceiver.equals(user);
+    }
+    public boolean isCanReply() {
+        return this.userSender != null;
+    }
+
 }

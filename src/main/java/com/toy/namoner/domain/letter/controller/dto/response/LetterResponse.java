@@ -18,6 +18,7 @@ public class LetterResponse {
     private final String imageUrl;
     private final FontType fontType;
     private final LetterPaperType letterPaperType;
+    private final Boolean isCanReply;
 
     public static LetterResponse from(Letter letter, String fullPathImageUrl) {
         return LetterResponse.builder()
@@ -27,6 +28,7 @@ public class LetterResponse {
                 .imageUrl(fullPathImageUrl)
                 .fontType(letter.getFontType())
                 .letterPaperType(letter.getLetterPaperType())
+                .isCanReply(letter.isCanReply())
                 .build();
     }
 }

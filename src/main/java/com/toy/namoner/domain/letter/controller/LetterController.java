@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.domain.auth.role.UserAuth;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,8 +63,11 @@ public class LetterController {
 	 * @return 편지 정보
 	 */
 	@NamonerResponse
+	@UserAuth
 	@GetMapping("/{letterId}")
-	public LetterResponse findByLetterId(@PathVariable("letterId") String letterId) {
-		return letterService.getLetterResponseByLetterId(letterId);
+	public LetterResponse findByLetterId(
+			NMNAuthentication authentication,
+			@PathVariable("letterId") String letterId) {
+		return letterService.getLetterResponseByLetterId(authentication.getUserId(), letterId);
 	}
 }

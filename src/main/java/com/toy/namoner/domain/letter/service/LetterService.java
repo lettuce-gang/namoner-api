@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.auth.role.UserRole;
 import org.springframework.stereotype.Service;
@@ -95,8 +96,12 @@ public class LetterService {
 		return letter;
 	}
 
-	public LetterResponse getLetterResponseByLetterId(String letterId) {
+	public LetterResponse getLetterResponseByLetterId(String userId, String letterId) {
 		Letter letter = findById(letterId);
+
+		if (!letter.checkUserReceiver(userService.findByUserId(userId))) {
+			throw new AuthorizationException("You are not authorized to view this letter.");
+		};
 
 		String imageUrl = imageService.getFileUrl(letter.getImageUrl());
 

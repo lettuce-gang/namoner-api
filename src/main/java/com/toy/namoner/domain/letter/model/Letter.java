@@ -125,6 +125,9 @@ public class Letter extends BaseEntity {
         return this.userReceiver.equals(user);
     }
     public boolean isCanReply() {
+        if (this.letterType == LetterType.REPLY) {
+            return false;
+        }
         return this.userSender != null;
     }
 

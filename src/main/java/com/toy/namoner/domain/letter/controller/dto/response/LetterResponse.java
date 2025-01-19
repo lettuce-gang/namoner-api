@@ -19,8 +19,11 @@ public class LetterResponse {
     private final FontType fontType;
     private final LetterPaperType letterPaperType;
     private final Boolean isCanReply;
+    private final LetterResponse reply;
 
     public static LetterResponse from(Letter letter, String fullPathImageUrl) {
+        LetterResponse reply = letter.getReplyLetter() == null ? null : from(letter.getReplyLetter(), fullPathImageUrl);
+
         return LetterResponse.builder()
                 .letterReceiver(letter.getLetterReceiver())
                 .letterSender(letter.getLetterSender())
@@ -29,6 +32,7 @@ public class LetterResponse {
                 .fontType(letter.getFontType())
                 .letterPaperType(letter.getLetterPaperType())
                 .isCanReply(letter.isCanReply())
+                .reply(reply)
                 .build();
     }
 }

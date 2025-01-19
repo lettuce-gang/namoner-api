@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.user.model;
 
+import com.toy.namoner.common.model.BaseEntity;
 import com.toy.namoner.domain.user.model.enums.UserStatus;
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.auth.role.UserRole;
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

@@ -2,6 +2,7 @@ package com.toy.namoner.domain.letter.model;
 
 import java.time.LocalDateTime;
 
+import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
 import com.toy.namoner.common.model.BaseEntity;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.model.enums.FontType;
@@ -9,14 +10,7 @@ import com.toy.namoner.domain.letter.model.enums.LetterPaperType;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import com.toy.namoner.domain.user.model.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,6 +50,9 @@ public class Letter extends BaseEntity {
 
     private String imageUrl;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Letter replyLetter;
+
     public static Letter createNormalLetterType(LetterSendRequest request, User userReceiver, User userSender, String imagerUrl) {
         LocalDateTime now = LocalDateTime.now();
 
@@ -89,6 +86,22 @@ public class Letter extends BaseEntity {
                 .isRead(false)
                 .build();
     }
+
+    public static Letter createReplyLetterType(LetterReplyRequest request, User userReceiver, User userSender, String imagerUrl) {
+        return Letter.builder()
+                .userReceiver(userReceiver)
+                .userSender(userSender)
+                .letterSender(request.getLetterSender())
+                .letterReceiver(request.getLetterReceiver())
+                .message(request.getMessage())
+                .letterPaperType(request.getLetterPaperType())
+                .fontType(request.getFontType())
+                .letterType(LetterType.REPLY)
+                .receiveDate(request.getReceiveDate())
+                .imageUrl(imagerUrl)
+                .isRead(false)
+                .build();
+    }
     public static Letter createBySend(LetterSendRequest request, User userReceiver, String imagerUrl) {
         return Letter.builder()
                 .userReceiver(userReceiver)
@@ -113,6 +126,10 @@ public class Letter extends BaseEntity {
     }
     public boolean isCanReply() {
         return this.userSender != null;
+    }
+
+    public void replyLetter(Letter replyLetter) {
+        this.replyLetter = replyLetter;
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.auth.role.UserAuth;
+import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,5 +70,23 @@ public class LetterController {
 			NMNAuthentication authentication,
 			@PathVariable("letterId") String letterId) {
 		return letterService.getLetterResponseByLetterId(authentication.getUserId(), letterId);
+	}
+
+	/**
+	 * 편지 답장
+	 *
+	 * @param originLetterId       원본 편지 ID
+	 * @param replyLetterRequest 답장 편지 정보
+	 * @param image                첨부할 이미지
+	 */
+	@NamonerResponse
+	@UserAuth
+	@PostMapping("/{letterId}/reply")
+	public void replyLetter(
+			NMNAuthentication authentication,
+			@PathVariable("letterId") String originLetterId,
+			@RequestPart(name = "letterInfo") LetterReplyRequest replyLetterRequest,
+			@RequestPart(required = false, name = "image") MultipartFile image) {
+		letterService.reply(authentication.getUserId(), originLetterId, replyLetterRequest, image);
 	}
 }

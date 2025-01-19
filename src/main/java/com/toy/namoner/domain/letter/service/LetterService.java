@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.toy.namoner.common.error.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.LetterReplyUserSenderNullPointException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.auth.role.UserRole;
+import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +50,7 @@ public class LetterService {
 		Letter letter = switch (letterSendRequest.getLetterType()) {
 			case LetterType.NORMAL -> Letter.createNormalLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
 			case LetterType.RESERVED -> Letter.createReservedLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
+			default -> throw new IllegalArgumentException("Unexpected value: " + letterSendRequest.getLetterType());
 		};
 
 		letterRepository.save(letter);
@@ -108,4 +111,25 @@ public class LetterService {
 		return LetterResponse.from(letter, imageUrl);
 	}
 
+	public void reply(String userSenderId, String originLetterId, LetterReplyRequest replyLetterSendRequest, MultipartFile image) {
+		Letter originLetter = letterRepository.findById(originLetterId)
+				.orElseThrow(() -> new EntityNotFoundException("Letter " + originLetterId + " not found"));
+
+		User userReceiver = originLetter.getUserSender();
+		if (userReceiver == null) {
+			throw new LetterReplyUserSenderNullPointException();
+		}
+
+		User userSender = userService.findByUserId(userSenderId);
+
+		String imageUrl =
+			image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
+
+		Letter replyLetter = Letter.createReplyLetterType(replyLetterSendRequest, originLetter.getUserReceiver(), userSender, imageUrl);
+
+		letterRepository.save(replyLetter);
+
+		originLetter.replyLetter(replyLetter);
+		letterRepository.save(originLetter);
+	}
 }

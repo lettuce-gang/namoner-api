@@ -59,8 +59,12 @@ public class LetterService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<LetterListResponse> findLettersByUserId(String userId) {
+	public List<LetterListResponse> findLettersByUserId(NMNAuthentication authentication, String userId) {
 		User user = userService.findByUserId(userId);
+
+		if (!authentication.verifyUser(user)) {
+			throw new AuthorizationException("User " + userId + " is not authorized");
+		}
 
 		List<Letter> sortedLetters = sortLetter(user.getReceiveLetters());
 

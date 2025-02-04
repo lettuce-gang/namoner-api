@@ -1,6 +1,5 @@
 package com.toy.namoner.domain.letter.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import com.toy.namoner.common.jwt.NMNAuthentication;
@@ -53,8 +52,9 @@ public class LetterController {
 	 */
 	@NamonerResponse
 	@GetMapping
-	public List<LetterListResponse> findLettersByUserId(@RequestParam("userId") String userId) {
-		return letterService.findLettersByUserId(userId);
+	@UserAuth
+	public List<LetterListResponse> findLettersByUserId(NMNAuthentication authentication, @RequestParam("userId") String userId) {
+		return letterService.findLettersByUserId(authentication, userId);
 	}
 
 	/**

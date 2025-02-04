@@ -1,5 +1,7 @@
 package com.toy.namoner.letter.service;
 
+import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.common.jwt.NMNAuthenticationImpl;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
@@ -64,8 +66,10 @@ class LetterServiceTest {
 
         when(userService.findByUserId(userId)).thenReturn(mockUser);
 
+        NMNAuthentication authentication = NMNAuthenticationImpl.create(mockUser);
+
         // When
-        List<LetterListResponse> result = letterService.findLettersByUserId(userId);
+        List<LetterListResponse> result = letterService.findLettersByUserId(authentication, userId);
 
         // Then
         assertThat(result).hasSize(6);

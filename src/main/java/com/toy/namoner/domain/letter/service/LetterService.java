@@ -7,9 +7,8 @@ import java.util.stream.Collectors;
 
 import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
-import com.toy.namoner.common.error.exceptions.LetterReplyUserSenderNullPointException;
+import com.toy.namoner.common.error.exceptions.UserSenderEmptyException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
-import com.toy.namoner.domain.auth.role.UserRole;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +45,7 @@ public class LetterService {
 			image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
 
 		User userSender =
-				authentication.getUserRole() == UserRole.GUEST ? null : userService.findByUserId(authentication.getUserId());
+				authentication.isGuest() ? null : userService.findByUserId(authentication.getUserId());
 
 		Letter letter = switch (letterSendRequest.getLetterType()) {
 			case LetterType.NORMAL -> Letter.createNormalLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
@@ -118,7 +117,7 @@ public class LetterService {
 
 		User userReceiver = originLetter.getUserSender();
 		if (userReceiver == null) {
-			throw new LetterReplyUserSenderNullPointException();
+			throw new UserSenderEmptyException();
 		}
 
 		User userSender = userService.findByUserId(userSenderId);

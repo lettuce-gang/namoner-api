@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.user.controller;
 
+import com.toy.namoner.common.jwt.NMNAuthentication;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,10 +37,8 @@ public class UserController {
 	 */
 	@NamonerResponse
 	@GetMapping("/postbox/{userId}")
-	public PostBoxResponse getPostBoxResponse(@PathVariable("userId") String userId) {
-		User user = userService.findByUserId(userId);
-
-		return PostBoxResponse.from(user);
+	public PostBoxResponse getPostBoxResponse(NMNAuthentication authentication, @PathVariable("userId") String userId) {
+		return userService.findPostBoxByUserId(authentication, userId);
 	}
 
 	/**

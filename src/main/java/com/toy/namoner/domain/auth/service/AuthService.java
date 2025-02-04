@@ -23,7 +23,7 @@ public class AuthService {
 
 		NMNToken nmnToken = jwtService.generateToken(user);
 
-		return user.isFirstLoginUser()
+		return user.isNotSignedUser()
 			? LoginResponse.createFirstLoginResponse(nmnToken, user)
 			: LoginResponse.createLoginResponse(nmnToken, user);
 	}

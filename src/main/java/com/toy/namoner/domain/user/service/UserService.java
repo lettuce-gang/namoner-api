@@ -2,6 +2,8 @@ package com.toy.namoner.domain.user.service;
 
 import java.util.Optional;
 
+import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import org.springframework.stereotype.Service;
 
 import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
@@ -57,4 +59,13 @@ public class UserService {
 		return UserInfoUpdateResponse.from(user);
     }
 
+	public PostBoxResponse findPostBoxByUserId(NMNAuthentication authentication, String userId) {
+		User user = findByUserId(userId);
+
+		if (user.isNotSignedUser()) {
+			return PostBoxResponse.createNotSignedUserPostBox();
+		}
+
+		return PostBoxResponse.from(user);
+	}
 }

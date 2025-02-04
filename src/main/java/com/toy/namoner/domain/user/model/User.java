@@ -63,14 +63,23 @@ public class User extends BaseEntity {
         return receiveLetters.size();
     }
 
-    public boolean isFirstLoginUser() {
-        return UserStatus.NOT_SIGNED == status;
+    public int getUnreadLetterCount() {
+        return (int) receiveLetters.stream()
+                .filter(letter -> !letter.isRead())
+                .count();
     }
 
+    public boolean isNotSignedUser() {
+        return UserStatus.NOT_SIGNED == status;
+    }
 
     public void firstUpdateUserInfo(UserInfoUpdateRequest updateInfo) {
         postboxName = updateInfo.getPostBoxName();
         isPhoneConnected = updateInfo.getIsPhoneConnected();
         status = UserStatus.SIGNED;
+    }
+
+    public boolean isPhoneConnected() {
+        return isPhoneConnected;
     }
 }

@@ -79,4 +79,8 @@ public class NMNAuthenticationImpl implements NMNAuthentication {
     public String getName() {
         return null;
     }
+    @Override
+    public boolean verifyUser(User user) {
+        return userId.equals(user.getId());
+    }
 }

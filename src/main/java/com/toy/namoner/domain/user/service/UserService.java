@@ -64,17 +64,21 @@ public class UserService {
 	public PostBoxResponse findPostBoxByUserId(NMNAuthentication authentication, String userId) {
 		User user = findByUserId(userId);
 
-		if (user.isNotSignedUser()) {
-			return PostBoxResponse.createNotSignedUserPostBox();
+		if (authentication.verifyUser(user)) {
+			return PostBoxResponse.createOwnerPostBox(user);
 		}
 
-		return PostBoxResponse.from(user);
+		if (user.isNotSignedUser()) {
+			return PostBoxResponse.createGuestPostBox();
+		}
+
+		return PostBoxResponse.createNonOwnerPostBox(user);
 	}
 
 	public UserIdResponse getUserIdResponseByPhoneNumber(String phoneNumber) {
 		User user = findOrCreateByPhoneNumber(phoneNumber);
 
-		if (!user.isPhoneConnected()) {
+		if (!user.getIsPhoneConnected()) {
 			throw new UserNotAllowedException("User " + phoneNumber + " is not allowed to access");
 		}
 		return UserIdResponse.from(user);

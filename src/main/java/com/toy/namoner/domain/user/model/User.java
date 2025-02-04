@@ -66,7 +66,7 @@ public class User extends BaseEntity {
 
     public int getUnreadLetterCount() {
         return (int) receiveLetters.stream()
-                .filter(letter -> !letter.isRead())
+                .filter(letter -> !letter.getIsRead())
                 .count();
     }
 
@@ -78,9 +78,5 @@ public class User extends BaseEntity {
         postboxName = updateInfo.getPostBoxName();
         isPhoneConnected = updateInfo.getIsPhoneConnected();
         status = UserStatus.SIGNED;
-    }
-
-    public boolean isPhoneConnected() {
-        return isPhoneConnected;
     }
 }

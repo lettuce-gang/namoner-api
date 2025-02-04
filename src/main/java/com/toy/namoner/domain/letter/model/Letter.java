@@ -135,8 +135,4 @@ public class Letter extends BaseEntity {
         this.replyLetter = replyLetter;
     }
 
-    public boolean isRead() {
-        return this.isRead;
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.letter.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.toy.namoner.common.error.exceptions.CannotReadableLetterException;
 import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
@@ -89,9 +91,14 @@ public class LetterService {
 		return ret;
 	}
 
-	public Letter findById(String letterId) {
+	private Letter findById(String letterId) {
 		Letter letter = letterRepository.findById(letterId)
 			.orElseThrow(() -> new EntityNotFoundException("Letter " + letterId + " not found"));
+
+		LocalDateTime now = LocalDateTime.now();
+		if (letter.getReceiveDate() != null && now.isBefore(letter.getReceiveDate())) {
+			throw new CannotReadableLetterException("Letter " + letterId + " cannot be read yet");
+		}
 
 		letter.readLetter();
 		letterRepository.save(letter);

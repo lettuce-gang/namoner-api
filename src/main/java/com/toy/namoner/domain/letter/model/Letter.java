@@ -2,6 +2,7 @@ package com.toy.namoner.domain.letter.model;
 
 import java.time.LocalDateTime;
 
+import com.toy.namoner.common.model.BaseEntity;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.model.enums.FontType;
 import com.toy.namoner.domain.letter.model.enums.LetterPaperType;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class Letter {
+public class Letter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;

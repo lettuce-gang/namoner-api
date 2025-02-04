@@ -55,6 +55,7 @@ public class User extends BaseEntity {
                 .status(UserStatus.NOT_SIGNED)
                 .postboxName(phoneNumber)
                 .role(UserRole.USER)
+                .isPhoneConnected(true)
                 .build();
     }
 

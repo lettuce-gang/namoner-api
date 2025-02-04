@@ -2,8 +2,10 @@ package com.toy.namoner.domain.user.service;
 
 import java.util.Optional;
 
+import com.toy.namoner.common.error.exceptions.UserNotAllowedException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
 import org.springframework.stereotype.Service;
 
 import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
@@ -67,5 +69,14 @@ public class UserService {
 		}
 
 		return PostBoxResponse.from(user);
+	}
+
+	public UserIdResponse getUserIdResponseByPhoneNumber(String phoneNumber) {
+		User user = findOrCreateByPhoneNumber(phoneNumber);
+
+		if (!user.isPhoneConnected()) {
+			throw new UserNotAllowedException("User " + phoneNumber + " is not allowed to access");
+		}
+		return UserIdResponse.from(user);
 	}
 }

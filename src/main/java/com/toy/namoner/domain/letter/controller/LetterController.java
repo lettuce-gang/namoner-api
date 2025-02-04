@@ -1,11 +1,8 @@
 package com.toy.namoner.domain.letter.controller;
 
-import java.security.Principal;
 import java.util.List;
 
-import com.toy.namoner.common.jwt.NMNAuthentication;
-import com.toy.namoner.domain.auth.role.UserAuth;
-import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,11 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.toy.namoner.common.handler.NamonerResponse;
+import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.domain.auth.role.UserAuth;
+import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterSendRequest;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterListResponse;
 import com.toy.namoner.domain.letter.controller.dto.response.LetterResponse;
 import com.toy.namoner.domain.letter.service.LetterService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -37,10 +38,10 @@ public class LetterController {
 	 * @param image             첨부할 이미지
 	 */
 	@NamonerResponse
-	@PostMapping
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void send(
 			NMNAuthentication authentication,
-			@RequestPart(name = "letterInfo") LetterSendRequest letterSendRequest,
+			@Valid @RequestPart(name = "letterInfo") LetterSendRequest letterSendRequest,
 			@RequestPart(required = false, name = "image") MultipartFile image) {
 		letterService.send(authentication, letterSendRequest, image);
 	}
@@ -81,7 +82,7 @@ public class LetterController {
 	 */
 	@NamonerResponse
 	@UserAuth
-	@PostMapping("/{letterId}/reply")
+	@PostMapping(path = "/{letterId}/reply", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public void replyLetter(
 			NMNAuthentication authentication,
 			@PathVariable("letterId") String originLetterId,

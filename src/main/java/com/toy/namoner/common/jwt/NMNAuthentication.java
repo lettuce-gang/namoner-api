@@ -8,4 +8,5 @@ public interface NMNAuthentication extends Authentication {
 
     UserRole getUserRole();
 
+    boolean isGuest();
 }

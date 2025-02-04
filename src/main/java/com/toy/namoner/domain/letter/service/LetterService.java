@@ -5,6 +5,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.toy.namoner.common.error.exceptions.AuthorizationException;
+import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
+import com.toy.namoner.common.error.exceptions.UserSenderEmptyException;
+import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,15 +38,19 @@ public class LetterService {
 	private final UserService userService;
 	private final LetterRepository letterRepository;
 
-	public void send(LetterSendRequest letterSendRequest, MultipartFile image) {
-		User receiver = userService.findByUserId(letterSendRequest.getUserReceiver());
+	public void send(NMNAuthentication authentication, LetterSendRequest letterSendRequest, MultipartFile image) {
+		User userReceiver = userService.findByUserId(letterSendRequest.getUserReceiver());
 
 		String imageUrl =
 			image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
 
+		User userSender =
+				authentication.isGuest() ? null : userService.findByUserId(authentication.getUserId());
+
 		Letter letter = switch (letterSendRequest.getLetterType()) {
-			case LetterType.NORMAL -> Letter.createNormalLetterType(letterSendRequest, receiver, imageUrl);
-			case LetterType.RESERVED -> Letter.createReservedLetterType(letterSendRequest, receiver, imageUrl);
+			case LetterType.NORMAL -> Letter.createNormalLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
+			case LetterType.RESERVED -> Letter.createReservedLetterType(letterSendRequest, userReceiver, userSender, imageUrl);
+			default -> throw new IllegalLetterTypeException();
 		};
 
 		letterRepository.save(letter);
@@ -90,12 +99,37 @@ public class LetterService {
 		return letter;
 	}
 
-	public LetterResponse getLetterResponseByLetterId(String letterId) {
+	public LetterResponse getLetterResponseByLetterId(String userId, String letterId) {
 		Letter letter = findById(letterId);
+
+		if (!letter.checkUserReceiver(userService.findByUserId(userId))) {
+			throw new AuthorizationException("You are not authorized to view this letter.");
+		};
 
 		String imageUrl = imageService.getFileUrl(letter.getImageUrl());
 
 		return LetterResponse.from(letter, imageUrl);
 	}
 
+	public void reply(String userSenderId, String originLetterId, LetterReplyRequest replyLetterSendRequest, MultipartFile image) {
+		Letter originLetter = letterRepository.findById(originLetterId)
+				.orElseThrow(() -> new EntityNotFoundException("Letter " + originLetterId + " not found"));
+
+		User userReceiver = originLetter.getUserSender();
+		if (userReceiver == null) {
+			throw new UserSenderEmptyException();
+		}
+
+		User userSender = userService.findByUserId(userSenderId);
+
+		String imageUrl =
+			image == null || image.isEmpty() ? null : imageService.uploadFile(ImageService.LETTER_IMAGE_DIR, image);
+
+		Letter replyLetter = Letter.createReplyLetterType(replyLetterSendRequest, originLetter.getUserReceiver(), userSender, imageUrl);
+
+		letterRepository.save(replyLetter);
+
+		originLetter.replyLetter(replyLetter);
+		letterRepository.save(originLetter);
+	}
 }

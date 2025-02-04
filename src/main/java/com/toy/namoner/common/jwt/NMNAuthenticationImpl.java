@@ -39,6 +39,11 @@ public class NMNAuthenticationImpl implements NMNAuthentication {
     }
 
     @Override
+    public boolean isGuest() {
+        return userRole == UserRole.GUEST;
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(() -> userRole.getKey());

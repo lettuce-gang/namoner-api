@@ -1,5 +1,6 @@
 package com.toy.namoner.domain.user.controller;
 
+import com.toy.namoner.common.jwt.NMNAuthentication;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +17,6 @@ import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
-import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -36,10 +36,8 @@ public class UserController {
 	 */
 	@NamonerResponse
 	@GetMapping("/postbox/{userId}")
-	public PostBoxResponse getPostBoxResponse(@PathVariable("userId") String userId) {
-		User user = userService.findByUserId(userId);
-
-		return PostBoxResponse.from(user);
+	public PostBoxResponse getPostBoxResponse(NMNAuthentication authentication, @PathVariable("userId") String userId) {
+		return userService.findPostBoxByUserId(authentication, userId);
 	}
 
 	/**
@@ -51,9 +49,7 @@ public class UserController {
 	@NamonerResponse
 	@GetMapping("/phone/{phoneNumber}")
 	public UserIdResponse getUserIdByPhoneNumber(@PathVariable("phoneNumber") String phoneNumber) {
-		User user = userService.findOrCreateByPhoneNumber(phoneNumber);
-
-		return UserIdResponse.from(user.getId());
+		return userService.getUserIdResponseByPhoneNumber(phoneNumber);
 	}
 
 	/**

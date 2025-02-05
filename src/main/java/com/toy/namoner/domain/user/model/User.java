@@ -55,6 +55,7 @@ public class User extends BaseEntity {
                 .status(UserStatus.NOT_SIGNED)
                 .postboxName(phoneNumber)
                 .role(UserRole.USER)
+                .isPhoneConnected(true)
                 .build();
     }
 
@@ -63,10 +64,15 @@ public class User extends BaseEntity {
         return receiveLetters.size();
     }
 
-    public boolean isFirstLoginUser() {
-        return UserStatus.NOT_SIGNED == status;
+    public int getUnreadLetterCount() {
+        return (int) receiveLetters.stream()
+                .filter(letter -> !letter.getIsRead())
+                .count();
     }
 
+    public boolean isNotSignedUser() {
+        return UserStatus.NOT_SIGNED == status;
+    }
 
     public void firstUpdateUserInfo(UserInfoUpdateRequest updateInfo) {
         postboxName = updateInfo.getPostBoxName();

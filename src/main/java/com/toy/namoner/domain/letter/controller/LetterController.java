@@ -60,6 +60,18 @@ public class LetterController {
 	}
 
 	/**
+	 * 내가 보낸 편지함 조회
+	 *
+	 * @return 편지함 목록
+	 */
+	@NamonerResponse
+	@GetMapping("/my")
+	@UserAuth
+	public List<LetterListResponse> findMyLetters(NMNAuthentication authentication) {
+		return letterService.findMyLetters(authentication);
+	}
+
+	/**
 	 * 편지 단건 조회
 	 *
 	 * @param letterId 편지 ID

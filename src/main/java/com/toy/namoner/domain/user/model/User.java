@@ -36,6 +36,7 @@ public class User extends BaseEntity {
     private UserRole role;
 
     private String phone;
+
     @OneToMany(mappedBy = "userSender")
     private List<Letter> sendLetters = new ArrayList<>();
 

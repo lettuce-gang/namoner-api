@@ -6,6 +6,8 @@ import com.toy.namoner.common.error.exceptions.UserNotAllowedException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
@@ -47,6 +49,10 @@ public class UserService {
 	}
 
 	public User findByUserId(String userId) {
+		if (StringUtils.isBlank(userId)) {
+			throw new IllegalArgumentException("Invalid userId");
+		}
+
 		return userRepository.findById(userId)
 			.orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found"));
 	}

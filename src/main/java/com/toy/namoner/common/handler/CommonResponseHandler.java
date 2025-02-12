@@ -15,7 +15,7 @@ public class CommonResponseHandler implements ResponseBodyAdvice<Object> {
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-		return true;
+		return returnType.hasMethodAnnotation(NamonerResponse.class);
 	}
 
 	@Override

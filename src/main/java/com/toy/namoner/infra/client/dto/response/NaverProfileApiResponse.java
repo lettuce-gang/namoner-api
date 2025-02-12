@@ -1,0 +1,25 @@
+package com.toy.namoner.infra.client.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public class NaverProfileApiResponse {
+
+    @JsonProperty("resultcode")
+    private String resultCode;
+
+    @JsonProperty("message")
+    private String message;
+
+    @JsonProperty("response")
+    private NaverProfileUserInfoResponse response;
+
+    public String getPhoneNumber() {
+        return response.getMobile();
+    }
+
+}

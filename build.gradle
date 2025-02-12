@@ -35,6 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     // jwt
@@ -50,6 +51,11 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+	// swagger
+	implementation 'com.github.therapi:therapi-runtime-javadoc:0.15.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1'
+	annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
 
     // db connector
     runtimeOnly 'com.h2database:h2'

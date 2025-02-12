@@ -30,6 +30,5 @@ public class LetterSendRequest {
     private final FontType fontType;
     @NotNull
     private final LetterType letterType;
-    @NotNull
     private final LocalDateTime receiveDate;
 }

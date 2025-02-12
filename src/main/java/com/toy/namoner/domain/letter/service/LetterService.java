@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
@@ -69,6 +70,14 @@ public class LetterService {
 		List<Letter> sortedLetters = sortLetter(user.getReceiveLetters());
 
 		return sortedLetters.stream().map(LetterListResponse::from).collect(Collectors.toList());
+	}
+
+	public List<LetterListResponse> findMyLetters(NMNAuthentication authentication) {
+		User user = userService.findByUserId(authentication.getUserId());
+		return Stream.ofNullable(user.getSendLetters())
+			.flatMap(List::stream)
+			.map(LetterListResponse::from)
+			.toList();
 	}
 
 	private List<Letter> sortLetter(List<Letter> letters) {

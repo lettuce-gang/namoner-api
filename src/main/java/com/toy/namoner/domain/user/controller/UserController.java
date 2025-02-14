@@ -1,6 +1,7 @@
 package com.toy.namoner.domain.user.controller;
 
 import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.domain.auth.role.UserAuth;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,20 +60,9 @@ public class UserController {
 	 * @return 업데이트된 사용자 정보
 	 */
 	@NamonerResponse
+	@UserAuth
 	@PostMapping("/info")
-	public UserInfoUpdateResponse updateUserInfo(@RequestBody UserInfoUpdateRequest request) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Object principal = authentication.getPrincipal();
-
-		String userId = null;
-		if (principal instanceof UserDetails) {
-			userId = ((UserDetails)principal).getUsername();
-		}
-
-		if (userId == null) {
-			throw new AuthorizationException("Wrong user!");
-		}
-
-		return userService.update(userId, request);
+	public UserInfoUpdateResponse updateUserInfo(NMNAuthentication authentication, @RequestBody UserInfoUpdateRequest request) {
+		return userService.update(authentication, request);
 	}
 }

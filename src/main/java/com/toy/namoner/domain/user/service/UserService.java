@@ -57,15 +57,15 @@ public class UserService {
 			.orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found"));
 	}
 
-    public UserInfoUpdateResponse update(String userId, UserInfoUpdateRequest updateInfo) {
-		User user = userRepository.findById(userId).get();
+	public UserInfoUpdateResponse update(NMNAuthentication authentication, UserInfoUpdateRequest updateInfo) {
+		User user = this.findByUserId(authentication.getUserId());
 
 		user.firstUpdateUserInfo(updateInfo);
 
 		userRepository.save(user);
 
 		return UserInfoUpdateResponse.from(user);
-    }
+	}
 
 	public PostBoxResponse findPostBoxByUserId(NMNAuthentication authentication, String userId) {
 		User user = findByUserId(userId);

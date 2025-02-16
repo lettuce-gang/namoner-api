@@ -135,4 +135,10 @@ public class Letter extends BaseEntity {
         this.replyLetter = replyLetter;
     }
 
+    public void updateLetterTypeIfReceived() {
+        LocalDateTime now = LocalDateTime.now();
+        if (this.receiveDate.isBefore(now))
+            this.letterType = LetterType.NORMAL;
+    }
+
 }

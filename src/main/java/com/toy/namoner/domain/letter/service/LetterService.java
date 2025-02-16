@@ -67,17 +67,27 @@ public class LetterService {
 			throw new AuthorizationException("User " + userId + " is not authorized");
 		}
 
-		List<Letter> sortedLetters = sortLetter(user.getReceiveLetters());
+		List<Letter> letters = user.getReceiveLetters();
+		updateLetterTypeIfReceived(letters);
+		List<Letter> sortedLetters = sortLetter(letters);
 
 		return sortedLetters.stream().map(LetterListResponse::from).collect(Collectors.toList());
 	}
 
 	public List<LetterListResponse> findMyLetters(NMNAuthentication authentication) {
 		User user = userService.findByUserId(authentication.getUserId());
-		return Stream.ofNullable(user.getSendLetters())
+		List<Letter> sendLetters = user.getSendLetters();
+
+		updateLetterTypeIfReceived(sendLetters);
+
+		return Stream.ofNullable(sendLetters)
 			.flatMap(List::stream)
 			.map(LetterListResponse::from)
 			.toList();
+	}
+
+	private void updateLetterTypeIfReceived(List<Letter> letters) {
+		letters.forEach(Letter::updateLetterTypeIfReceived);
 	}
 
 	private List<Letter> sortLetter(List<Letter> letters) {

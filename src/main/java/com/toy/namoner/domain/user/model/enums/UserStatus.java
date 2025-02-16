@@ -1,5 +1,5 @@
 package com.toy.namoner.domain.user.model.enums;
 
 public enum UserStatus {
-    NOT_SIGNED, SIGNED
+    NOT_SIGNED, SIGNED, DISABLED
 }

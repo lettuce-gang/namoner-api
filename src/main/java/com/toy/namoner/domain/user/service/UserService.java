@@ -2,17 +2,17 @@ package com.toy.namoner.domain.user.service;
 
 import java.util.Optional;
 
-import com.toy.namoner.common.error.exceptions.UserNotAllowedException;
-import com.toy.namoner.common.jwt.NMNAuthentication;
-import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
-import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
+import com.toy.namoner.common.error.exceptions.UserNotAllowedException;
+import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.common.utils.PhoneNumberUtils;
 import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.repository.UserRepository;
@@ -54,6 +54,7 @@ public class UserService {
 		}
 
 		return userRepository.findById(userId)
+			.filter(User::isEnabled)
 			.orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found"));
 	}
 
@@ -87,6 +88,14 @@ public class UserService {
 		if (!user.getIsPhoneConnected()) {
 			throw new UserNotAllowedException("User " + phoneNumber + " is not allowed to access");
 		}
+		return UserIdResponse.from(user);
+	}
+
+	@Transactional
+	public UserIdResponse withdraw(NMNAuthentication authentication) {
+		User user = findByUserId(authentication.getUserId());
+		user.setToDisable();
+
 		return UserIdResponse.from(user);
 	}
 }

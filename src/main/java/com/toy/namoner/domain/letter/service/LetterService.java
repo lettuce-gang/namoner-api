@@ -74,7 +74,7 @@ public class LetterService {
 		return sortedLetters.stream().map(LetterListResponse::from).collect(Collectors.toList());
 	}
 
-	public List<LetterListResponse> findMyLetters(NMNAuthentication authentication) {
+	public List<LetterListResponse> findSendLetters(NMNAuthentication authentication) {
 		User user = userService.findByUserId(authentication.getUserId());
 		List<Letter> sendLetters = user.getSendLetters();
 

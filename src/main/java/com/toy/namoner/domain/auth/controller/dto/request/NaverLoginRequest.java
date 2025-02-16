@@ -1,7 +1,5 @@
 package com.toy.namoner.domain.auth.controller.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

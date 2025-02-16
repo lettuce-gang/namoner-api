@@ -1,22 +1,33 @@
 package com.toy.namoner.domain.user.model;
 
-import com.toy.namoner.domain.user.contoller.dto.request.UserInfoUpdateRequest;
+import com.toy.namoner.common.model.BaseEntity;
 import com.toy.namoner.domain.user.model.enums.UserStatus;
 import com.toy.namoner.domain.letter.model.Letter;
-import com.toy.namoner.domain.user.model.enums.UserRole;
-
-import jakarta.persistence.*;
-import lombok.*;
+import com.toy.namoner.domain.auth.role.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity(name = "nmn_user")
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -25,6 +36,7 @@ public class User {
     private UserRole role;
 
     private String phone;
+
     @OneToMany(mappedBy = "userSender")
     private List<Letter> sendLetters = new ArrayList<>();
 
@@ -44,6 +56,7 @@ public class User {
                 .status(UserStatus.NOT_SIGNED)
                 .postboxName(phoneNumber)
                 .role(UserRole.USER)
+                .isPhoneConnected(true)
                 .build();
     }
 
@@ -52,10 +65,15 @@ public class User {
         return receiveLetters.size();
     }
 
-    public boolean isFirstLoginUser() {
-        return UserStatus.NOT_SIGNED == status;
+    public int getUnreadLetterCount() {
+        return (int) receiveLetters.stream()
+                .filter(letter -> !letter.getIsRead())
+                .count();
     }
 
+    public boolean isNotSignedUser() {
+        return UserStatus.NOT_SIGNED == status;
+    }
 
     public void firstUpdateUserInfo(UserInfoUpdateRequest updateInfo) {
         postboxName = updateInfo.getPostBoxName();

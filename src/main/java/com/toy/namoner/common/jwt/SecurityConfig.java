@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.toy.namoner.common.error.GlobalExceptionHandler;
 import com.toy.namoner.common.jwt.filter.ExceptionHandlerFilter;
 import com.toy.namoner.common.jwt.filter.JwtAuthenticationFilter;
 import com.toy.namoner.domain.auth.role.UserRole;
@@ -26,8 +28,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
-    private static final String PERMITTED_ROLES[] = {UserRole.ADMIN.getValue(), UserRole.USER.getValue()};
-    private final JwtService jwtService;
+	private final JwtAuthenticationFilter authenticationFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,9 +41,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(cors -> cors.configurationSource(customCorsConfigurationSource()))
                 // JWT 검증 필터 추가
-                .addFilterBefore(new JwtAuthenticationFilter(jwtService),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new ExceptionHandlerFilter(), JwtAuthenticationFilter.class);
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class);
 
         return http.build();
     }

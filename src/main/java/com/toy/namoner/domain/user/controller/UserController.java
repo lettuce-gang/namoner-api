@@ -1,10 +1,6 @@
 package com.toy.namoner.domain.user.controller;
 
-import com.toy.namoner.common.jwt.NMNAuthentication;
-import com.toy.namoner.domain.auth.role.UserAuth;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.toy.namoner.common.error.exceptions.AuthorizationException;
 import com.toy.namoner.common.handler.NamonerResponse;
+import com.toy.namoner.common.jwt.NMNAuthentication;
+import com.toy.namoner.domain.auth.role.UserAuth;
 import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
@@ -64,5 +61,17 @@ public class UserController {
 	@PostMapping("/info")
 	public UserInfoUpdateResponse updateUserInfo(NMNAuthentication authentication, @RequestBody UserInfoUpdateRequest request) {
 		return userService.update(authentication, request);
+	}
+
+	/**
+	 * 사용자 회원 탈퇴
+	 *
+	 * @return 사용자 아이디
+	 */
+	@NamonerResponse
+	@UserAuth
+	@DeleteMapping
+	public UserIdResponse withdrawUser(NMNAuthentication authentication) {
+		return userService.withdraw(authentication);
 	}
 }

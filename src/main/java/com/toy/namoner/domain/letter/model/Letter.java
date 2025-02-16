@@ -16,12 +16,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Slf4j
 public class Letter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -137,6 +139,12 @@ public class Letter extends BaseEntity {
 
     public void updateLetterTypeIfReceived() {
         LocalDateTime now = LocalDateTime.now();
+
+        if (this.receiveDate == null) {
+            log.warn("Letter {} receiveDate is null", this.id);
+            return;
+        }
+
         if (this.receiveDate.isBefore(now))
             this.letterType = LetterType.NORMAL;
     }

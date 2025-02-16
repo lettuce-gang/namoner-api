@@ -24,6 +24,9 @@ import com.toy.namoner.domain.letter.controller.dto.response.LetterResponse;
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import com.toy.namoner.domain.letter.repository.LetterRepository;
+import com.toy.namoner.domain.stat.model.LetterStat;
+import com.toy.namoner.domain.stat.model.enums.LetterActionType;
+import com.toy.namoner.domain.stat.repository.StatRepository;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
 import com.toy.namoner.infra.service.ImageService;
@@ -40,6 +43,7 @@ public class LetterService {
 	private final ImageService imageService;
 	private final UserService userService;
 	private final LetterRepository letterRepository;
+	private final StatRepository statRepository;
 
 	public void send(NMNAuthentication authentication, LetterSendRequest letterSendRequest, MultipartFile image) {
 		User userReceiver = userService.findByUserId(letterSendRequest.getUserReceiver());
@@ -57,6 +61,10 @@ public class LetterService {
 		};
 
 		letterRepository.save(letter);
+
+		statRepository.logLetter(LetterStat.builderFrom(letter)
+				.actionType(LetterActionType.SEND)
+				.build());
 	}
 
 	@Transactional(readOnly = true)
@@ -126,6 +134,10 @@ public class LetterService {
 		letter.readLetter();
 		letterRepository.save(letter);
 
+		statRepository.logLetter(LetterStat.builderFrom(letter)
+			.actionType(LetterActionType.RECEIVE)
+			.build());
+
 		return letter;
 	}
 
@@ -161,5 +173,9 @@ public class LetterService {
 
 		originLetter.replyLetter(replyLetter);
 		letterRepository.save(originLetter);
+
+		statRepository.logLetter(LetterStat.builderFrom(replyLetter)
+			.actionType(LetterActionType.REPLY)
+			.build());
 	}
 }

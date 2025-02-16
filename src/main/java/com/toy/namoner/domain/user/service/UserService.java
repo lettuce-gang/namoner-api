@@ -10,6 +10,9 @@ import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
 import com.toy.namoner.common.error.exceptions.UserNotAllowedException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.common.utils.PhoneNumberUtils;
+import com.toy.namoner.domain.stat.model.UserStat;
+import com.toy.namoner.domain.stat.model.enums.UserActionType;
+import com.toy.namoner.domain.stat.repository.StatRepository;
 import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserService {
 	private final UserRepository userRepository;
+	private final StatRepository statRepository;
 
 	public User findOrCreateByPhoneNumber(String phoneNumber) {
 		final String nmnSpecPhoneNumber = PhoneNumberUtils.convertPhoneNumberToNMNSpec(phoneNumber);
@@ -60,10 +64,15 @@ public class UserService {
 
 	public UserInfoUpdateResponse update(NMNAuthentication authentication, UserInfoUpdateRequest updateInfo) {
 		User user = this.findByUserId(authentication.getUserId());
-
 		user.firstUpdateUserInfo(updateInfo);
-
 		userRepository.save(user);
+
+		statRepository.logUser(UserStat.builderFrom(user)
+			.actionType(UserActionType.JOIN)
+			.gender(null) // TODO 데이터 만들어지면 이 필드도 넣어야 함
+			.age(null)
+			.referrer(null)
+			.build());
 
 		return UserInfoUpdateResponse.from(user);
 	}
@@ -95,6 +104,13 @@ public class UserService {
 	public UserIdResponse withdraw(NMNAuthentication authentication) {
 		User user = findByUserId(authentication.getUserId());
 		user.setToDisable();
+
+		statRepository.logUser(UserStat.builderFrom(user)
+			.actionType(UserActionType.WITHDRAW)
+			.gender(null) // TODO 데이터 만들어지면 이 필드도 넣어야 함
+			.age(null)
+			.referrer(null)
+			.build());
 
 		return UserIdResponse.from(user);
 	}

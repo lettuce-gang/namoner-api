@@ -65,7 +65,7 @@ public class LetterController {
 	 * @return 편지함 목록
 	 */
 	@NamonerResponse
-	@GetMapping("/my")
+	@GetMapping("/sent")
 	@UserAuth
 	public List<LetterListResponse> findSendLetters(NMNAuthentication authentication) {
 		return letterService.findSendLetters(authentication);

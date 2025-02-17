@@ -47,7 +47,11 @@ public class NaverOAuthService implements OAuthService {
 			token.getAuthenticationCode());
 		NaverProfileApiResponse profile = profileResponse.getBody();
 
-		OAuthUserInfo oAuthUserInfo = OAuthUserInfo.builder().phoneNum(profile.getPhoneNumber()).build();
+		OAuthUserInfo oAuthUserInfo = OAuthUserInfo.builder()
+			.phoneNum(profile.getPhoneNumber())
+			.gender(profile.getGender())
+			.age(profile.getAge())
+			.build();
 
 		return authService.loginByOAuthInfo(oAuthUserInfo);
 	}

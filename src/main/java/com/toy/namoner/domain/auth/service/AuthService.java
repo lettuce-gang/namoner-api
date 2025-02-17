@@ -19,13 +19,13 @@ public class AuthService {
 	private final JwtService jwtService;
 
 	public LoginResponse loginByOAuthInfo(OAuthUserInfo info) {
-		User user = userService.findOrCreateByPhoneNumber(info.getPhoneNum());
+		User user = userService.findOrCreateByOAuth(info);
 
 		NMNToken nmnToken = jwtService.generateToken(user);
 
-		return user.isNotSignedUser()
-			? LoginResponse.createFirstLoginResponse(nmnToken, user)
-			: LoginResponse.createLoginResponse(nmnToken, user);
+		return user.isSignedUser()
+			? LoginResponse.createLoginResponse(nmnToken, user)
+			: LoginResponse.createFirstLoginResponse(nmnToken, user);
 	}
 
 }

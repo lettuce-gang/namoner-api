@@ -99,7 +99,7 @@ public class LetterController {
 	public void replyLetter(
 			NMNAuthentication authentication,
 			@PathVariable("letterId") String originLetterId,
-			@RequestPart(name = "letterInfo") LetterReplyRequest replyLetterRequest,
+			@Valid @RequestPart(name = "letterInfo") LetterReplyRequest replyLetterRequest,
 			@RequestPart(required = false, name = "image") MultipartFile image) {
 		letterService.reply(authentication.getUserId(), originLetterId, replyLetterRequest, image);
 	}

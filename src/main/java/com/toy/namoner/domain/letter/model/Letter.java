@@ -90,6 +90,8 @@ public class Letter extends BaseEntity {
     }
 
     public static Letter createReplyLetterType(LetterReplyRequest request, User userReceiver, User userSender, String imagerUrl) {
+        LocalDateTime now = LocalDateTime.now();
+
         return Letter.builder()
                 .userReceiver(userReceiver)
                 .userSender(userSender)
@@ -99,7 +101,7 @@ public class Letter extends BaseEntity {
                 .letterPaperType(request.getLetterPaperType())
                 .fontType(request.getFontType())
                 .letterType(LetterType.REPLY)
-                .receiveDate(request.getReceiveDate())
+                .receiveDate(now)
                 .imageUrl(imagerUrl)
                 .isRead(false)
                 .build();

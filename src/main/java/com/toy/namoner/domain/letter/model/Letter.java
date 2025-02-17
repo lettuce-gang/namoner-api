@@ -123,7 +123,7 @@ public class Letter extends BaseEntity {
         this.isRead = true;
     }
 
-    public boolean checkUserReceiver(User user) {
+    public boolean isReceiver(User user) {
         return this.userReceiver.equals(user);
     }
     public boolean isCanReply() {

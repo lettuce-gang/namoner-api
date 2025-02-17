@@ -21,9 +21,25 @@ public class LetterResponse {
     private final Boolean isCanReply;
     private final LetterResponse reply;
 
-    public static LetterResponse from(Letter letter, String fullPathImageUrl) {
-        LetterResponse reply = letter.getReplyLetter() == null ? null : from(letter.getReplyLetter(), fullPathImageUrl);
+    public static LetterResponse createLetterWithReply(Letter originalLetter, String originalLetterImage, Letter replyLetter, String replyLetterImage) {
+        LetterResponse reply = LetterResponse.create(replyLetter, replyLetterImage);
+        return createWithReply(originalLetter, originalLetterImage, reply);
+    }
 
+
+    public static LetterResponse create(Letter letter, String fullPathImageUrl) {
+        return LetterResponse.builder()
+                .letterReceiver(letter.getLetterReceiver())
+                .letterSender(letter.getLetterSender())
+                .message(letter.getMessage())
+                .imageUrl(fullPathImageUrl)
+                .fontType(letter.getFontType())
+                .letterPaperType(letter.getLetterPaperType())
+                .isCanReply(letter.isCanReply())
+                .build();
+    }
+
+    private static LetterResponse createWithReply(Letter letter, String fullPathImageUrl, LetterResponse reply) {
         return LetterResponse.builder()
                 .letterReceiver(letter.getLetterReceiver())
                 .letterSender(letter.getLetterSender())

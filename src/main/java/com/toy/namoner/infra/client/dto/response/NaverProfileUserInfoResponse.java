@@ -13,6 +13,10 @@ public class NaverProfileUserInfoResponse {
 
     private final String mobile;
 
+    private final String gender;
+
+    private final String age;
+
     @JsonProperty("mobile_e164")
     private final String mobileE164;
 }

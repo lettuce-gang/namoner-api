@@ -1,6 +1,7 @@
 package com.toy.namoner.infra.client.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.toy.namoner.domain.user.model.enums.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,17 +10,25 @@ import lombok.Getter;
 @AllArgsConstructor
 public class NaverProfileApiResponse {
 
-    @JsonProperty("resultcode")
-    private String resultCode;
+	@JsonProperty("resultcode")
+	private String resultCode;
 
-    @JsonProperty("message")
-    private String message;
+	@JsonProperty("message")
+	private String message;
 
-    @JsonProperty("response")
-    private NaverProfileUserInfoResponse response;
+	@JsonProperty("response")
+	private NaverProfileUserInfoResponse response;
 
-    public String getPhoneNumber() {
-        return response.getMobile();
-    }
+	public String getPhoneNumber() {
+		return response.getMobile();
+	}
+
+	public Gender getGender() {
+		return Gender.of(response.getGender());
+	}
+
+	public String getAge() {
+		return response.getAge();
+	}
 
 }

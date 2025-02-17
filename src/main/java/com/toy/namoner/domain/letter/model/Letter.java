@@ -130,7 +130,13 @@ public class Letter extends BaseEntity {
         if (this.letterType == LetterType.REPLY) {
             return false;
         }
-        return this.userSender != null;
+        if (this.replyLetter != null) {
+            return false;
+        }
+        if (this.userSender == null) {
+            return false;
+        }
+        return true;
     }
 
     public void replyLetter(Letter replyLetter) {

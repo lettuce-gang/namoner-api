@@ -144,6 +144,10 @@ public class LetterService {
 	}
 
 	private LetterResponse createLetterResponse(Letter letter) {
+		if (letter.hasReplyLetter()) {
+			return createReplyLetterResponse(letter.getReplyLetter());
+		}
+
 		String imageUrl = imageService.getFileUrl(letter.getImageUrl());
 
 		return LetterResponse.create(letter, imageUrl);

@@ -157,4 +157,8 @@ public class Letter extends BaseEntity {
             this.letterType = LetterType.NORMAL;
     }
 
+    public boolean hasReplyLetter() {
+        return this.replyLetter != null;
+    }
+
 }

@@ -83,7 +83,7 @@ public class User extends BaseEntity {
     }
 
     public boolean isSignedUser() {
-        return UserStatus.NOT_SIGNED == status;
+        return UserStatus.SIGNED == status;
     }
 
     public void firstUpdateUserInfo(UserJoinRequest updateInfo) {

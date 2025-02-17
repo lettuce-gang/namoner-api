@@ -132,13 +132,36 @@ public class LetterService {
 	public LetterResponse getLetterResponseByLetterId(String userId, String letterId) {
 		Letter letter = findById(letterId);
 
-		if (!letter.checkUserReceiver(userService.findByUserId(userId))) {
+		if (!letter.isReceiver(userService.findByUserId(userId))) {
 			throw new AuthorizationException("You are not authorized to view this letter.");
 		};
 
+		if (LetterType.REPLY == letter.getLetterType()) {
+			return createReplyLetterResponse(letter);
+		}
+
+		return createLetterResponse(letter);
+	}
+
+	private LetterResponse createLetterResponse(Letter letter) {
 		String imageUrl = imageService.getFileUrl(letter.getImageUrl());
 
-		return LetterResponse.from(letter, imageUrl);
+		return LetterResponse.create(letter, imageUrl);
+	}
+
+	private LetterResponse createReplyLetterResponse(Letter replyLetter) {
+		Letter originalLetter = findByReplyLetterId(replyLetter.getId());
+
+		String originalLetterImage = imageService.getFileUrl(originalLetter.getImageUrl());
+		String replyLetterImage = imageService.getFileUrl(replyLetter.getImageUrl());
+
+		return LetterResponse.createLetterWithReply(originalLetter, originalLetterImage, replyLetter, replyLetterImage);
+	}
+	private Letter findByReplyLetterId(String replyLetterId) {
+		Letter letter = letterRepository.findByReplyLetter_Id(replyLetterId)
+				.orElseThrow(() -> new EntityNotFoundException("Letter with replyLetterId " + replyLetterId + " not found"));
+
+		return letter;
 	}
 
 	public void reply(String userSenderId, String originLetterId, LetterReplyRequest replyLetterSendRequest, MultipartFile image) {

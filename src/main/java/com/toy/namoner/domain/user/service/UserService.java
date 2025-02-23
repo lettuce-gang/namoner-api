@@ -10,7 +10,6 @@ import com.toy.namoner.common.error.exceptions.EntityNotFoundException;
 import com.toy.namoner.common.error.exceptions.UserAlreadyJoinException;
 import com.toy.namoner.common.error.exceptions.UserNotAllowedException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
-import com.toy.namoner.common.utils.PhoneNumberUtils;
 import com.toy.namoner.domain.stat.model.UserStat;
 import com.toy.namoner.domain.stat.model.enums.UserActionType;
 import com.toy.namoner.domain.stat.repository.StatRepository;
@@ -19,9 +18,8 @@ import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
 import com.toy.namoner.domain.user.model.User;
-import com.toy.namoner.domain.user.model.UserJoin;
+import com.toy.namoner.domain.user.model.UserDetail;
 import com.toy.namoner.domain.user.repository.UserRepository;
-import com.toy.namoner.infra.service.dto.OAuthUserInfo;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,27 +29,15 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final StatRepository statRepository;
 
-	public User findOrCreateByOAuth(OAuthUserInfo info) {
-		final String nmnSpecPhoneNumber = PhoneNumberUtils.convertPhoneNumberToNMNSpec(info.getPhoneNum());
-
-		return userRepository.findByPhone(nmnSpecPhoneNumber)
-			.orElseGet(() -> createNotRegisteredUser(UserJoin.fromOAuth(info)));
-	}
-
-	public User findOrCreateByPhoneNumber(String phoneNumber) {
-		final String nmnSpecPhoneNumber = PhoneNumberUtils.convertPhoneNumberToNMNSpec(phoneNumber);
-
-		return userRepository.findByPhone(nmnSpecPhoneNumber)
-			.orElseGet(() -> createNotRegisteredUser(UserJoin.fromPhoneNumber(nmnSpecPhoneNumber)));
+	public User findOrCreateByUserJoin(UserDetail userDetail) {
+		UserDetail userDetailEncrypted = userDetail.encrypt();
+		return userRepository.findByPhone(userDetailEncrypted.getPhoneNum())
+			.orElseGet(() -> userRepository.save(User.from(userDetailEncrypted)));
 	}
 
 	public int getLettersCountByPhoneNumber(String phoneNumber) {
 		Optional<User> optionalUser = userRepository.findByPhone(phoneNumber);
 		return optionalUser.map(User::getReceiveLettersCount).orElse(0);
-	}
-
-	public User createNotRegisteredUser(UserJoin userJoin) {
-		return userRepository.save(User.from(userJoin));
 	}
 
 	public User findByUserId(String userId) {
@@ -63,14 +49,15 @@ public class UserService {
 			.orElseThrow(() -> new EntityNotFoundException("User " + userId + " not found"));
 	}
 
+	@Transactional
 	public UserInfoUpdateResponse join(NMNAuthentication authentication, UserJoinRequest updateInfo) {
 		User user = this.findByUserId(authentication.getUserId());
 		if (user.isSignedUser()) {
 			throw new UserAlreadyJoinException("User " + user.getId() + " already joined");
 		}
 
-		user.firstUpdateUserInfo(updateInfo);
-		userRepository.save(user);
+		// 사용자 가입처리
+		user.join(updateInfo);
 
 		statRepository.logUser(UserStat.builderFrom(user)
 			.actionType(UserActionType.JOIN)
@@ -97,7 +84,7 @@ public class UserService {
 	}
 
 	public UserIdResponse getUserIdResponseByPhoneNumber(String phoneNumber) {
-		User user = findOrCreateByPhoneNumber(phoneNumber);
+		User user = findOrCreateByUserJoin(UserDetail.fromPhoneNumber(phoneNumber));
 
 		if (!user.getIsPhoneConnected()) {
 			throw new UserNotAllowedException("User " + phoneNumber + " is not allowed to access");

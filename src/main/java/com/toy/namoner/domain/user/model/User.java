@@ -59,15 +59,15 @@ public class User extends BaseEntity {
 
     private Boolean isPhoneConnected;
 
-    public static User from(UserJoin userJoin) {
+    public static User from(UserDetail userDetail) {
         return User.builder()
-            .phone(userJoin.getPhoneNum())
+            .phone(userDetail.getPhoneNum())
             .status(UserStatus.NOT_SIGNED)
-            .postboxName(userJoin.getPhoneNum())
+            .postboxName(userDetail.getPhoneNum())
             .role(UserRole.USER)
             .isPhoneConnected(true)
-			.gender(userJoin.getGender())
-			.age(userJoin.getAge())
+			.gender(userDetail.getGender())
+			.age(userDetail.getAge())
 			.build();
     }
 
@@ -86,7 +86,7 @@ public class User extends BaseEntity {
         return UserStatus.SIGNED == status;
     }
 
-    public void firstUpdateUserInfo(UserJoinRequest updateInfo) {
+    public void join(UserJoinRequest updateInfo) {
         postboxName = updateInfo.getPostBoxName();
         isPhoneConnected = updateInfo.getIsPhoneConnected();
         status = UserStatus.SIGNED;

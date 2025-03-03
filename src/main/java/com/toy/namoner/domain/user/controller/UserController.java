@@ -77,7 +77,7 @@ public class UserController {
 	@UserAuth
 	@DeleteMapping
 	public UserIdResponse withdrawUser(NMNAuthentication authentication,
-		@RequestParam(value = "reason", required = false) String reason) {
+									   @RequestParam(value = "reason", required = false) String reason) {
 		return userService.withdraw(authentication, reason);
 	}
 
@@ -103,5 +103,12 @@ public class UserController {
 	@PatchMapping("/config")
 	public UserIdResponse setConfig(NMNAuthentication authentication, @RequestBody UserConfigRequest request) {
 		return userService.setConfig(authentication, request);
+	}
+
+	@NamonerResponse
+	@UserAuth
+	@PatchMapping("/postbox")
+	public UserInfoResponse updatePostBoxName(NMNAuthentication authentication, @RequestParam("postbox") String postbox) {
+		return userService.updatePostBoxName(authentication, postbox);
 	}
 }

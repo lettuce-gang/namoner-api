@@ -131,4 +131,13 @@ public class UserService {
 		User user = findByUserId(authentication.getUserId());
 		return UserInfoResponse.from(user);
 	}
+
+	public UserInfoResponse updatePostBoxName(NMNAuthentication authentication, String postbox) {
+		User user = findByUserId(authentication.getUserId());
+		user.updatePostBoxName(postbox);
+
+		userRepository.save(user);
+
+		return UserInfoResponse.from(user);
+	}
 }

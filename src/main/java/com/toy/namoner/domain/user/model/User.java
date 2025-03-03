@@ -106,4 +106,7 @@ public class User extends BaseEntity {
     public void updateToDisable() {
         this.status = UserStatus.DISABLED;
     }
+    public void updatePostBoxName(String postBoxName) {
+        this.postboxName = postBoxName;
+    }
 }

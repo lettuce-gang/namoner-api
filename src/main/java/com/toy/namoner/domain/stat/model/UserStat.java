@@ -1,7 +1,12 @@
 package com.toy.namoner.domain.stat.model;
 
+import java.util.Date;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.toy.namoner.domain.stat.model.enums.UserActionType;
 import com.toy.namoner.domain.user.model.User;
@@ -21,6 +26,10 @@ import lombok.NoArgsConstructor;
 public class UserStat {
 	@Id
 	private Long id;
+
+	@CreatedDate
+	@Field(name = "@timestamp", type = FieldType.Date)
+	private Date timestamp;
 
 	private UserActionType actionType;
 	private String userId;

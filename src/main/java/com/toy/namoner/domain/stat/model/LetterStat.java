@@ -1,7 +1,11 @@
 package com.toy.namoner.domain.stat.model;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.FontType;
@@ -23,6 +27,9 @@ import lombok.NoArgsConstructor;
 public class LetterStat {
 	@Id
 	private String id;
+
+	@Field(name = "@timestamp", type = FieldType.Date)
+	private Date timestamp;
 
 	private LetterActionType actionType;
 	private String letterId;

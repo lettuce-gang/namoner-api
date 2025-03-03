@@ -13,6 +13,7 @@ import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.stat.model.UserStat;
 import com.toy.namoner.domain.stat.model.enums.UserActionType;
 import com.toy.namoner.domain.stat.repository.StatRepository;
+import com.toy.namoner.domain.user.controller.dto.request.UserConfigRequest;
 import com.toy.namoner.domain.user.controller.dto.request.UserJoinRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
@@ -93,15 +94,23 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserIdResponse withdraw(NMNAuthentication authentication) {
+	public UserIdResponse setConfig(NMNAuthentication authentication, UserConfigRequest request) {
 		User user = findByUserId(authentication.getUserId());
-		user.setToDisable();
+		request.apply(user.getUserConfigOrCreate());
+		return UserIdResponse.from(user);
+	}
+
+	@Transactional
+	public UserIdResponse withdraw(NMNAuthentication authentication, String reason) {
+		User user = findByUserId(authentication.getUserId());
+		user.updateToDisable();
 
 		statRepository.logUser(UserStat.builderFrom(user)
 			.actionType(UserActionType.WITHDRAW)
 			.gender(user.getGender())
 			.age(user.getAge())
 			.referrer("withdraw")
+			.reason(reason)
 			.build());
 
 		return UserIdResponse.from(user);

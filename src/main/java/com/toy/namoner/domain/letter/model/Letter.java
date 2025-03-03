@@ -128,6 +128,9 @@ public class Letter extends BaseEntity {
     public boolean isReceiver(User user) {
         return this.userReceiver.equals(user);
     }
+    public boolean isSender(User user) {
+        return this.userSender.equals(user);
+    }
     public boolean isCanReply() {
         if (this.letterType == LetterType.REPLY) {
             return false;
@@ -159,6 +162,11 @@ public class Letter extends BaseEntity {
 
     public boolean hasReplyLetter() {
         return this.replyLetter != null;
+    }
+
+    public boolean isReserved() {
+        updateLetterTypeIfReceived();
+        return this.letterType == LetterType.RESERVED;
     }
 
 }

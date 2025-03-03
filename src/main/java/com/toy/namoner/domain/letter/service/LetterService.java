@@ -126,14 +126,6 @@ public class LetterService {
 		Letter letter = letterRepository.findById(letterId)
 			.orElseThrow(() -> new EntityNotFoundException("Letter " + letterId + " not found"));
 
-		LocalDateTime now = LocalDateTime.now();
-		if (letter.getReceiveDate() != null && now.isBefore(letter.getReceiveDate())) {
-			throw new CannotReadableLetterException("Letter " + letterId + " cannot be read yet");
-		}
-
-		letter.readLetter();
-		letterRepository.save(letter);
-
 		statRepository.logLetter(LetterStat.builderFrom(letter)
 			.actionType(LetterActionType.RECEIVE)
 			.build());
@@ -144,15 +136,30 @@ public class LetterService {
 	public LetterResponse getLetterResponseByLetterId(String userId, String letterId) {
 		Letter letter = findById(letterId);
 
-		if (!letter.isReceiver(userService.findByUserId(userId))) {
+		User user = userService.findByUserId(userId);
+		if (!letter.isReceiver(user) && !letter.isSender(user)) {
 			throw new AuthorizationException("You are not authorized to view this letter.");
-		};
+		}
+
+		if (letter.isReserved()) {
+			return createReservedLetterResponse(letter, user);
+		}
+
+		letter.readLetter();
 
 		if (LetterType.REPLY == letter.getLetterType()) {
 			return createReplyLetterResponse(letter);
 		}
 
 		return createLetterResponse(letter);
+	}
+
+	private LetterResponse createReservedLetterResponse(Letter letter, User user) {
+		if (letter.isSender(user)) {
+			return createLetterResponse(letter);
+		}
+
+		throw new CannotReadableLetterException("Letter " + letter.getId() + " cannot be read yet");
 	}
 
 	private LetterResponse createLetterResponse(Letter letter) {

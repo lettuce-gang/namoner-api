@@ -1,6 +1,5 @@
 package com.toy.namoner.domain.letter.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,6 +11,7 @@ import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
 import com.toy.namoner.common.error.exceptions.UserSenderEmptyException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
+import com.toy.namoner.domain.user.model.enums.PostboxType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -133,36 +133,33 @@ public class LetterService {
 		return letter;
 	}
 
-	public LetterResponse getLetterResponseByLetterId(String userId, String letterId) {
+	public LetterResponse getLetterResponseByLetterId(String userId, String letterId, PostboxType postboxType) {
 		Letter letter = findById(letterId);
 
 		User user = userService.findByUserId(userId);
+
 		if (!letter.isReceiver(user) && !letter.isSender(user)) {
 			throw new AuthorizationException("You are not authorized to view this letter.");
 		}
 
-		if (letter.isReserved()) {
-			return createReservedLetterResponse(letter, user);
+		if (PostboxType.SEND == postboxType && letter.isSender(user)) {
+			return createLetterResponse(letter);
+		}
+
+		if (letter.checkIsReserved()) {
+			throw new CannotReadableLetterException("Letter " + letter.getId() + " cannot be read yet");
 		}
 
 		letter.readLetter();
 
-		if (LetterType.REPLY == letter.getLetterType()) {
-			return createReplyLetterResponse(letter);
-		}
-
 		return createLetterResponse(letter);
 	}
 
-	private LetterResponse createReservedLetterResponse(Letter letter, User user) {
-		if (letter.isSender(user)) {
-			return createLetterResponse(letter);
+	private LetterResponse createLetterResponse(Letter letter) {
+		if (letter.checkIsReply()) {
+			return createReplyLetterResponse(letter);
 		}
 
-		throw new CannotReadableLetterException("Letter " + letter.getId() + " cannot be read yet");
-	}
-
-	private LetterResponse createLetterResponse(Letter letter) {
 		if (letter.hasReplyLetter()) {
 			return createReplyLetterResponse(letter.getReplyLetter());
 		}

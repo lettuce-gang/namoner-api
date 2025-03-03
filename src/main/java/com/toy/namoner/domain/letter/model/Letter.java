@@ -164,9 +164,13 @@ public class Letter extends BaseEntity {
         return this.replyLetter != null;
     }
 
-    public boolean isReserved() {
+    public boolean checkIsReserved() {
         updateLetterTypeIfReceived();
         return this.letterType == LetterType.RESERVED;
+    }
+
+    public boolean checkIsReply() {
+        return this.letterType == LetterType.REPLY;
     }
 
 }

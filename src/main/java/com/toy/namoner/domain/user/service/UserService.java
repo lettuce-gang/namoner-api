@@ -20,6 +20,7 @@ import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserInfoResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserJoinResponse;
 import com.toy.namoner.domain.user.model.User;
+import com.toy.namoner.domain.user.model.UserConfig;
 import com.toy.namoner.domain.user.model.UserDetail;
 import com.toy.namoner.domain.user.repository.UserRepository;
 
@@ -97,7 +98,16 @@ public class UserService {
 	@Transactional
 	public UserIdResponse setConfig(NMNAuthentication authentication, UserConfigRequest request) {
 		User user = findByUserId(authentication.getUserId());
-		request.apply(user.getUserConfigOrCreate());
+		UserConfig userConfig = user.getUserConfigOrCreate();
+		if (request.getShowPostbox() != null) {
+			userConfig.setShowPostbox(request.getShowPostbox());
+		}
+		if (request.getReceiveLetter() != null) {
+			userConfig.setReceiveLetter(request.getReceiveLetter());
+		}
+		if (request.getShowLetterCount() != null) {
+			userConfig.setShowLetterCount(request.getShowLetterCount());
+		}
 		return UserIdResponse.from(user);
 	}
 

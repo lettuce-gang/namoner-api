@@ -108,7 +108,7 @@ public class UserController {
 	@NamonerResponse
 	@UserAuth
 	@PatchMapping("/postbox")
-	public UserInfoResponse updatePostBoxName(NMNAuthentication authentication, @RequestParam("postbox") String postbox) {
+	public UserInfoResponse updatePostBoxName(NMNAuthentication authentication, @RequestParam("name") String postbox) {
 		return userService.updatePostBoxName(authentication, postbox);
 	}
 }

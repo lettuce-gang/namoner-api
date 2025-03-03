@@ -2,6 +2,7 @@ package com.toy.namoner.domain.stat.model;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -28,6 +29,7 @@ public class LetterStat {
 	@Id
 	private String id;
 
+	@CreatedDate
 	@Field(name = "@timestamp", type = FieldType.Date)
 	private Date timestamp;
 

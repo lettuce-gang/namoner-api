@@ -27,6 +27,7 @@ public class UserStat {
 	private Gender gender;
 	private String age;
 	private String referrer;
+	private String reason;
 
 	public static UserStat.UserStatBuilder builderFrom(User user) {
 		return UserStat.builder()

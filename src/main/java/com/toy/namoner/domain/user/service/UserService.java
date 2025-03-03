@@ -13,11 +13,14 @@ import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.stat.model.UserStat;
 import com.toy.namoner.domain.stat.model.enums.UserActionType;
 import com.toy.namoner.domain.stat.repository.StatRepository;
+import com.toy.namoner.domain.user.controller.dto.request.UserConfigRequest;
 import com.toy.namoner.domain.user.controller.dto.request.UserJoinRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
-import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserInfoResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserJoinResponse;
 import com.toy.namoner.domain.user.model.User;
+import com.toy.namoner.domain.user.model.UserConfig;
 import com.toy.namoner.domain.user.model.UserDetail;
 import com.toy.namoner.domain.user.repository.UserRepository;
 
@@ -50,7 +53,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserInfoUpdateResponse join(NMNAuthentication authentication, UserJoinRequest updateInfo) {
+	public UserJoinResponse join(NMNAuthentication authentication, UserJoinRequest updateInfo) {
 		User user = this.findByUserId(authentication.getUserId());
 		if (user.isSignedUser()) {
 			throw new UserAlreadyJoinException("User " + user.getId() + " already joined");
@@ -66,7 +69,7 @@ public class UserService {
 			.referrer(updateInfo.getReferrer())
 			.build());
 
-		return UserInfoUpdateResponse.from(user);
+		return UserJoinResponse.from();
 	}
 
 	public PostBoxResponse findPostBoxByUserId(NMNAuthentication authentication, String userId) {
@@ -93,17 +96,39 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserIdResponse withdraw(NMNAuthentication authentication) {
+	public UserIdResponse setConfig(NMNAuthentication authentication, UserConfigRequest request) {
 		User user = findByUserId(authentication.getUserId());
-		user.setToDisable();
+		UserConfig userConfig = user.getUserConfigOrCreate();
+		if (request.getShowPostbox() != null) {
+			userConfig.setShowPostbox(request.getShowPostbox());
+		}
+		if (request.getReceiveLetter() != null) {
+			userConfig.setReceiveLetter(request.getReceiveLetter());
+		}
+		if (request.getShowLetterCount() != null) {
+			userConfig.setShowLetterCount(request.getShowLetterCount());
+		}
+		return UserIdResponse.from(user);
+	}
+
+	@Transactional
+	public UserIdResponse withdraw(NMNAuthentication authentication, String reason) {
+		User user = findByUserId(authentication.getUserId());
+		user.updateToDisable();
 
 		statRepository.logUser(UserStat.builderFrom(user)
 			.actionType(UserActionType.WITHDRAW)
 			.gender(user.getGender())
 			.age(user.getAge())
 			.referrer("withdraw")
+			.reason(reason)
 			.build());
 
 		return UserIdResponse.from(user);
+	}
+
+	public UserInfoResponse getUserInfo(NMNAuthentication authentication) {
+		User user = findByUserId(authentication.getUserId());
+		return UserInfoResponse.from(user);
 	}
 }

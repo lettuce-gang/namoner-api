@@ -12,6 +12,7 @@ import com.toy.namoner.domain.user.controller.dto.request.UserJoinRequest;
 import com.toy.namoner.domain.user.model.enums.Gender;
 import com.toy.namoner.domain.user.model.enums.UserStatus;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -55,6 +56,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    @Embedded
+    private UserConfig userConfig;
+
     private String postboxName;
 
     private Boolean isPhoneConnected;
@@ -92,7 +96,14 @@ public class User extends BaseEntity {
         status = UserStatus.SIGNED;
     }
 
-    public void setToDisable() {
+    public UserConfig getUserConfigOrCreate() {
+        if (userConfig == null) {
+            userConfig = new UserConfig();
+        }
+        return userConfig;
+    }
+
+    public void updateToDisable() {
         this.status = UserStatus.DISABLED;
     }
 }

@@ -2,19 +2,23 @@ package com.toy.namoner.domain.user.controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.toy.namoner.common.handler.NamonerResponse;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.auth.role.UserAuth;
+import com.toy.namoner.domain.user.controller.dto.request.UserConfigRequest;
 import com.toy.namoner.domain.user.controller.dto.request.UserJoinRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
-import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserInfoResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserJoinResponse;
 import com.toy.namoner.domain.user.service.UserService;
 
 import jakarta.validation.Valid;
@@ -60,7 +64,7 @@ public class UserController {
 	@NamonerResponse
 	@UserAuth
 	@PostMapping("/join")
-	public UserInfoUpdateResponse join(NMNAuthentication authentication, @Valid @RequestBody UserJoinRequest request) {
+	public UserJoinResponse join(NMNAuthentication authentication, @Valid @RequestBody UserJoinRequest request) {
 		return userService.join(authentication, request);
 	}
 
@@ -72,7 +76,32 @@ public class UserController {
 	@NamonerResponse
 	@UserAuth
 	@DeleteMapping
-	public UserIdResponse withdrawUser(NMNAuthentication authentication) {
-		return userService.withdraw(authentication);
+	public UserIdResponse withdrawUser(NMNAuthentication authentication,
+		@RequestParam(value = "reason", required = false) String reason) {
+		return userService.withdraw(authentication, reason);
+	}
+
+	/**
+	 * 내 정보 조회
+	 *
+	 * @return 내 정보
+	 */
+	@NamonerResponse
+	@UserAuth
+	@GetMapping
+	public UserInfoResponse getUserInfo(NMNAuthentication authentication) {
+		return userService.getUserInfo(authentication);
+	}
+
+	/**
+	 * 사용자 설정 변경
+	 *
+	 * @return 사용자 아이디
+	 */
+	@NamonerResponse
+	@UserAuth
+	@PatchMapping("/config")
+	public UserIdResponse setConfig(NMNAuthentication authentication, @RequestBody UserConfigRequest request) {
+		return userService.setConfig(authentication, request);
 	}
 }

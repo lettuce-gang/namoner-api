@@ -17,7 +17,8 @@ import com.toy.namoner.domain.user.controller.dto.request.UserConfigRequest;
 import com.toy.namoner.domain.user.controller.dto.request.UserJoinRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
-import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserInfoResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserJoinResponse;
 import com.toy.namoner.domain.user.service.UserService;
 
 import jakarta.validation.Valid;
@@ -63,7 +64,7 @@ public class UserController {
 	@NamonerResponse
 	@UserAuth
 	@PostMapping("/join")
-	public UserInfoUpdateResponse join(NMNAuthentication authentication, @Valid @RequestBody UserJoinRequest request) {
+	public UserJoinResponse join(NMNAuthentication authentication, @Valid @RequestBody UserJoinRequest request) {
 		return userService.join(authentication, request);
 	}
 
@@ -78,6 +79,18 @@ public class UserController {
 	public UserIdResponse withdrawUser(NMNAuthentication authentication,
 		@RequestParam(value = "reason", required = false) String reason) {
 		return userService.withdraw(authentication, reason);
+	}
+
+	/**
+	 * 내 정보 조회
+	 *
+	 * @return 내 정보
+	 */
+	@NamonerResponse
+	@UserAuth
+	@GetMapping
+	public UserInfoResponse getUserInfo(NMNAuthentication authentication) {
+		return userService.getUserInfo(authentication);
 	}
 
 	/**

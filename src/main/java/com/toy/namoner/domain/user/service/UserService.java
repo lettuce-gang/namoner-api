@@ -17,7 +17,8 @@ import com.toy.namoner.domain.user.controller.dto.request.UserConfigRequest;
 import com.toy.namoner.domain.user.controller.dto.request.UserJoinRequest;
 import com.toy.namoner.domain.user.controller.dto.response.PostBoxResponse;
 import com.toy.namoner.domain.user.controller.dto.response.UserIdResponse;
-import com.toy.namoner.domain.user.controller.dto.response.UserInfoUpdateResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserInfoResponse;
+import com.toy.namoner.domain.user.controller.dto.response.UserJoinResponse;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.model.UserDetail;
 import com.toy.namoner.domain.user.repository.UserRepository;
@@ -51,7 +52,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserInfoUpdateResponse join(NMNAuthentication authentication, UserJoinRequest updateInfo) {
+	public UserJoinResponse join(NMNAuthentication authentication, UserJoinRequest updateInfo) {
 		User user = this.findByUserId(authentication.getUserId());
 		if (user.isSignedUser()) {
 			throw new UserAlreadyJoinException("User " + user.getId() + " already joined");
@@ -67,7 +68,7 @@ public class UserService {
 			.referrer(updateInfo.getReferrer())
 			.build());
 
-		return UserInfoUpdateResponse.from(user);
+		return UserJoinResponse.from();
 	}
 
 	public PostBoxResponse findPostBoxByUserId(NMNAuthentication authentication, String userId) {
@@ -114,5 +115,10 @@ public class UserService {
 			.build());
 
 		return UserIdResponse.from(user);
+	}
+
+	public UserInfoResponse getUserInfo(NMNAuthentication authentication) {
+		User user = findByUserId(authentication.getUserId());
+		return UserInfoResponse.from(user);
 	}
 }

@@ -13,12 +13,13 @@ import lombok.RequiredArgsConstructor;
 public class UserInfoResponse {
 	private final String postBoxName;
 	private final UserConfig userConfig;
-
+	private final String userId;
 	public static UserInfoResponse from(User user) {
 		return UserInfoResponse.builder()
-			.postBoxName(user.getPostboxName())
-			.userConfig(user.getUserConfig())
-			.build();
+				.postBoxName(user.getPostboxName())
+				.userConfig(user.getUserConfig())
+				.userId(user.getId())
+				.build();
 	}
 
 }

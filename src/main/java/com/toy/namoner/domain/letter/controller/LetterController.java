@@ -2,6 +2,7 @@ package com.toy.namoner.domain.letter.controller;
 
 import java.util.List;
 
+import com.toy.namoner.domain.user.model.enums.PostboxType;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,8 +83,9 @@ public class LetterController {
 	@GetMapping("/{letterId}")
 	public LetterResponse findByLetterId(
 			NMNAuthentication authentication,
-			@PathVariable("letterId") String letterId) {
-		return letterService.getLetterResponseByLetterId(authentication.getUserId(), letterId);
+			@PathVariable("letterId") String letterId,
+			@RequestParam("type") PostboxType postboxType) {
+		return letterService.getLetterResponseByLetterId(authentication.getUserId(), letterId, postboxType);
 	}
 
 	/**

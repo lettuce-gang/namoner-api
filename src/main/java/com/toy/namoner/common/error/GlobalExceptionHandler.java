@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Throwable.class)
-	public ResponseEntity<Response<Void>> exceptionHandler(Throwable throwable, HttpServletRequest request) {
+	public ResponseEntity<Response<Void>> handleThrowable(Throwable throwable, HttpServletRequest request) {
 		TraceErrorException exception;
 
 		if (throwable instanceof TraceErrorException) {

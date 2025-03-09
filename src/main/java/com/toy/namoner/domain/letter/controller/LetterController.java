@@ -2,6 +2,7 @@ package com.toy.namoner.domain.letter.controller;
 
 import java.util.List;
 
+import com.toy.namoner.domain.user.model.enums.PostboxType;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,10 +66,10 @@ public class LetterController {
 	 * @return 편지함 목록
 	 */
 	@NamonerResponse
-	@GetMapping("/my")
+	@GetMapping("/sent")
 	@UserAuth
-	public List<LetterListResponse> findMyLetters(NMNAuthentication authentication) {
-		return letterService.findMyLetters(authentication);
+	public List<LetterListResponse> findSendLetters(NMNAuthentication authentication) {
+		return letterService.findSendLetters(authentication);
 	}
 
 	/**
@@ -82,8 +83,9 @@ public class LetterController {
 	@GetMapping("/{letterId}")
 	public LetterResponse findByLetterId(
 			NMNAuthentication authentication,
-			@PathVariable("letterId") String letterId) {
-		return letterService.getLetterResponseByLetterId(authentication.getUserId(), letterId);
+			@PathVariable("letterId") String letterId,
+			@RequestParam("type") PostboxType postboxType) {
+		return letterService.getLetterResponseByLetterId(authentication.getUserId(), letterId, postboxType);
 	}
 
 	/**
@@ -99,7 +101,7 @@ public class LetterController {
 	public void replyLetter(
 			NMNAuthentication authentication,
 			@PathVariable("letterId") String originLetterId,
-			@RequestPart(name = "letterInfo") LetterReplyRequest replyLetterRequest,
+			@Valid @RequestPart(name = "letterInfo") LetterReplyRequest replyLetterRequest,
 			@RequestPart(required = false, name = "image") MultipartFile image) {
 		letterService.reply(authentication.getUserId(), originLetterId, replyLetterRequest, image);
 	}

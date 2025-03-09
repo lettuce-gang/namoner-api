@@ -1,14 +1,18 @@
 package com.toy.namoner.domain.user.model;
 
-import com.toy.namoner.common.model.BaseEntity;
-import com.toy.namoner.domain.user.model.enums.UserStatus;
-import com.toy.namoner.domain.letter.model.Letter;
-import com.toy.namoner.domain.auth.role.UserRole;
-
 import java.util.ArrayList;
 import java.util.List;
-import com.toy.namoner.domain.user.controller.dto.request.UserInfoUpdateRequest;
 
+import org.hibernate.annotations.SQLRestriction;
+
+import com.toy.namoner.common.model.BaseEntity;
+import com.toy.namoner.domain.auth.role.UserRole;
+import com.toy.namoner.domain.letter.model.Letter;
+import com.toy.namoner.domain.user.controller.dto.request.UserJoinRequest;
+import com.toy.namoner.domain.user.model.enums.Gender;
+import com.toy.namoner.domain.user.model.enums.UserStatus;
+
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,6 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@SQLRestriction(value = "status <> 'DISABLED'")
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,6 +42,11 @@ public class User extends BaseEntity {
 
     private String phone;
 
+    private String age;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     @OneToMany(mappedBy = "userSender")
     private List<Letter> sendLetters = new ArrayList<>();
 
@@ -46,18 +56,23 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    @Embedded
+    private UserConfig userConfig;
+
     private String postboxName;
 
     private Boolean isPhoneConnected;
 
-    public static User craeteNotRegisteredUser(String phoneNumber) {
+    public static User from(UserDetail userDetail) {
         return User.builder()
-                .phone(phoneNumber)
-                .status(UserStatus.NOT_SIGNED)
-                .postboxName(phoneNumber)
-                .role(UserRole.USER)
-                .isPhoneConnected(true)
-                .build();
+            .phone(userDetail.getPhoneNum())
+            .status(UserStatus.NOT_SIGNED)
+            .postboxName(userDetail.getPhoneNum())
+            .role(UserRole.USER)
+            .isPhoneConnected(true)
+			.gender(userDetail.getGender())
+			.age(userDetail.getAge())
+			.build();
     }
 
 
@@ -71,13 +86,27 @@ public class User extends BaseEntity {
                 .count();
     }
 
-    public boolean isNotSignedUser() {
-        return UserStatus.NOT_SIGNED == status;
+    public boolean isSignedUser() {
+        return UserStatus.SIGNED == status;
     }
 
-    public void firstUpdateUserInfo(UserInfoUpdateRequest updateInfo) {
+    public void join(UserJoinRequest updateInfo) {
         postboxName = updateInfo.getPostBoxName();
         isPhoneConnected = updateInfo.getIsPhoneConnected();
         status = UserStatus.SIGNED;
+    }
+
+    public UserConfig getUserConfigOrCreate() {
+        if (userConfig == null) {
+            userConfig = new UserConfig();
+        }
+        return userConfig;
+    }
+
+    public void updateToDisable() {
+        this.status = UserStatus.DISABLED;
+    }
+    public void updatePostBoxName(String postBoxName) {
+        this.postboxName = postBoxName;
     }
 }

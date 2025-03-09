@@ -16,12 +16,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Slf4j
 public class Letter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -88,6 +90,8 @@ public class Letter extends BaseEntity {
     }
 
     public static Letter createReplyLetterType(LetterReplyRequest request, User userReceiver, User userSender, String imagerUrl) {
+        LocalDateTime now = LocalDateTime.now();
+
         return Letter.builder()
                 .userReceiver(userReceiver)
                 .userSender(userSender)
@@ -97,7 +101,7 @@ public class Letter extends BaseEntity {
                 .letterPaperType(request.getLetterPaperType())
                 .fontType(request.getFontType())
                 .letterType(LetterType.REPLY)
-                .receiveDate(request.getReceiveDate())
+                .receiveDate(now)
                 .imageUrl(imagerUrl)
                 .isRead(false)
                 .build();
@@ -121,18 +125,52 @@ public class Letter extends BaseEntity {
         this.isRead = true;
     }
 
-    public boolean checkUserReceiver(User user) {
+    public boolean isReceiver(User user) {
         return this.userReceiver.equals(user);
+    }
+    public boolean isSender(User user) {
+        return this.userSender.equals(user);
     }
     public boolean isCanReply() {
         if (this.letterType == LetterType.REPLY) {
             return false;
         }
-        return this.userSender != null;
+        if (this.replyLetter != null) {
+            return false;
+        }
+        if (this.userSender == null) {
+            return false;
+        }
+        return true;
     }
 
     public void replyLetter(Letter replyLetter) {
         this.replyLetter = replyLetter;
+    }
+
+    public void updateLetterTypeIfReceived() {
+        LocalDateTime now = LocalDateTime.now();
+
+        if (this.receiveDate == null) {
+            log.warn("Letter {} receiveDate is null", this.id);
+            return;
+        }
+
+        if (this.receiveDate.isBefore(now))
+            this.letterType = LetterType.NORMAL;
+    }
+
+    public boolean hasReplyLetter() {
+        return this.replyLetter != null;
+    }
+
+    public boolean checkIsReserved() {
+        updateLetterTypeIfReceived();
+        return this.letterType == LetterType.RESERVED;
+    }
+
+    public boolean checkIsReply() {
+        return this.letterType == LetterType.REPLY;
     }
 
 }

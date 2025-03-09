@@ -25,6 +25,4 @@ public class LetterReplyRequest {
     private final LetterPaperType letterPaperType;
     @NotNull
     private final FontType fontType;
-    @NotNull
-    private final LocalDateTime receiveDate;
 }

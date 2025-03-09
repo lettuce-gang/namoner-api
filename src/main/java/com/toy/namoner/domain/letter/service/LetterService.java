@@ -1,6 +1,5 @@
 package com.toy.namoner.domain.letter.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,6 +11,7 @@ import com.toy.namoner.common.error.exceptions.IllegalLetterTypeException;
 import com.toy.namoner.common.error.exceptions.UserSenderEmptyException;
 import com.toy.namoner.common.jwt.NMNAuthentication;
 import com.toy.namoner.domain.letter.controller.dto.request.LetterReplyRequest;
+import com.toy.namoner.domain.user.model.enums.PostboxType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +24,9 @@ import com.toy.namoner.domain.letter.controller.dto.response.LetterResponse;
 import com.toy.namoner.domain.letter.model.Letter;
 import com.toy.namoner.domain.letter.model.enums.LetterType;
 import com.toy.namoner.domain.letter.repository.LetterRepository;
+import com.toy.namoner.domain.stat.model.LetterStat;
+import com.toy.namoner.domain.stat.model.enums.LetterActionType;
+import com.toy.namoner.domain.stat.repository.StatRepository;
 import com.toy.namoner.domain.user.model.User;
 import com.toy.namoner.domain.user.service.UserService;
 import com.toy.namoner.infra.service.ImageService;
@@ -40,6 +43,7 @@ public class LetterService {
 	private final ImageService imageService;
 	private final UserService userService;
 	private final LetterRepository letterRepository;
+	private final StatRepository statRepository;
 
 	public void send(NMNAuthentication authentication, LetterSendRequest letterSendRequest, MultipartFile image) {
 		User userReceiver = userService.findByUserId(letterSendRequest.getUserReceiver());
@@ -57,6 +61,10 @@ public class LetterService {
 		};
 
 		letterRepository.save(letter);
+
+		statRepository.logLetter(LetterStat.builderFrom(letter)
+				.actionType(LetterActionType.SEND)
+				.build());
 	}
 
 	@Transactional(readOnly = true)
@@ -67,17 +75,27 @@ public class LetterService {
 			throw new AuthorizationException("User " + userId + " is not authorized");
 		}
 
-		List<Letter> sortedLetters = sortLetter(user.getReceiveLetters());
+		List<Letter> letters = user.getReceiveLetters();
+		updateLetterTypeIfReceived(letters);
+		List<Letter> sortedLetters = sortLetter(letters);
 
 		return sortedLetters.stream().map(LetterListResponse::from).collect(Collectors.toList());
 	}
 
-	public List<LetterListResponse> findMyLetters(NMNAuthentication authentication) {
+	public List<LetterListResponse> findSendLetters(NMNAuthentication authentication) {
 		User user = userService.findByUserId(authentication.getUserId());
-		return Stream.ofNullable(user.getSendLetters())
+		List<Letter> sendLetters = user.getSendLetters();
+
+		updateLetterTypeIfReceived(sendLetters);
+
+		return Stream.ofNullable(sendLetters)
 			.flatMap(List::stream)
 			.map(LetterListResponse::from)
 			.toList();
+	}
+
+	private void updateLetterTypeIfReceived(List<Letter> letters) {
+		letters.forEach(Letter::updateLetterTypeIfReceived);
 	}
 
 	private List<Letter> sortLetter(List<Letter> letters) {
@@ -108,27 +126,62 @@ public class LetterService {
 		Letter letter = letterRepository.findById(letterId)
 			.orElseThrow(() -> new EntityNotFoundException("Letter " + letterId + " not found"));
 
-		LocalDateTime now = LocalDateTime.now();
-		if (letter.getReceiveDate() != null && now.isBefore(letter.getReceiveDate())) {
-			throw new CannotReadableLetterException("Letter " + letterId + " cannot be read yet");
-		}
-
-		letter.readLetter();
-		letterRepository.save(letter);
+		statRepository.logLetter(LetterStat.builderFrom(letter)
+			.actionType(LetterActionType.RECEIVE)
+			.build());
 
 		return letter;
 	}
 
-	public LetterResponse getLetterResponseByLetterId(String userId, String letterId) {
+	public LetterResponse getLetterResponseByLetterId(String userId, String letterId, PostboxType postboxType) {
 		Letter letter = findById(letterId);
 
-		if (!letter.checkUserReceiver(userService.findByUserId(userId))) {
+		User user = userService.findByUserId(userId);
+
+		if (!letter.isReceiver(user) && !letter.isSender(user)) {
 			throw new AuthorizationException("You are not authorized to view this letter.");
-		};
+		}
+
+		if (PostboxType.SEND == postboxType && letter.isSender(user)) {
+			return createLetterResponse(letter);
+		}
+
+		if (letter.checkIsReserved()) {
+			throw new CannotReadableLetterException("Letter " + letter.getId() + " cannot be read yet");
+		}
+
+		letter.readLetter();
+
+		return createLetterResponse(letter);
+	}
+
+	private LetterResponse createLetterResponse(Letter letter) {
+		if (letter.checkIsReply()) {
+			return createReplyLetterResponse(letter);
+		}
+
+		if (letter.hasReplyLetter()) {
+			return createReplyLetterResponse(letter.getReplyLetter());
+		}
 
 		String imageUrl = imageService.getFileUrl(letter.getImageUrl());
 
-		return LetterResponse.from(letter, imageUrl);
+		return LetterResponse.create(letter, imageUrl);
+	}
+
+	private LetterResponse createReplyLetterResponse(Letter replyLetter) {
+		Letter originalLetter = findByReplyLetterId(replyLetter.getId());
+
+		String originalLetterImage = imageService.getFileUrl(originalLetter.getImageUrl());
+		String replyLetterImage = imageService.getFileUrl(replyLetter.getImageUrl());
+
+		return LetterResponse.createLetterWithReply(originalLetter, originalLetterImage, replyLetter, replyLetterImage);
+	}
+	private Letter findByReplyLetterId(String replyLetterId) {
+		Letter letter = letterRepository.findByReplyLetter_Id(replyLetterId)
+				.orElseThrow(() -> new EntityNotFoundException("Letter with replyLetterId " + replyLetterId + " not found"));
+
+		return letter;
 	}
 
 	public void reply(String userSenderId, String originLetterId, LetterReplyRequest replyLetterSendRequest, MultipartFile image) {
@@ -151,5 +204,9 @@ public class LetterService {
 
 		originLetter.replyLetter(replyLetter);
 		letterRepository.save(originLetter);
+
+		statRepository.logLetter(LetterStat.builderFrom(replyLetter)
+			.actionType(LetterActionType.REPLY)
+			.build());
 	}
 }

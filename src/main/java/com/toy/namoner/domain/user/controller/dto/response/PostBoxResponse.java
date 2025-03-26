@@ -2,6 +2,7 @@ package com.toy.namoner.domain.user.controller.dto.response;
 
 import com.toy.namoner.domain.user.model.User;
 
+import com.toy.namoner.domain.user.model.UserConfig;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class PostBoxResponse {
     private final Boolean existPostBox;
     private final String postboxName;
     private final Integer unreadLetterCount;
+    private final UserConfig userConfig;
 
     public static PostBoxResponse createNonOwnerPostBox(User user) {
         return createUserPostBox(user, false);
@@ -35,6 +37,7 @@ public class PostBoxResponse {
                 .existPostBox(true)
                 .postboxName(user.getPostboxName())
                 .unreadLetterCount(user.getUnreadLetterCount())
+                .userConfig(user.getUserConfigOrCreate())
                 .build();
     }
 }

@@ -89,7 +89,7 @@ public class UserService {
 	public UserIdResponse getUserIdResponseByPhoneNumber(String phoneNumber) {
 		User user = findOrCreateByUserJoin(UserDetail.fromPhoneNumber(phoneNumber));
 
-		if (!user.getIsPhoneConnected()) {
+		if (!user.isShowPostBox()) {
 			throw new UserNotAllowedException("User " + phoneNumber + " is not allowed to access");
 		}
 		return UserIdResponse.from(user);

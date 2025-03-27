@@ -63,7 +63,7 @@ public class User extends BaseEntity {
 
     private Boolean isPhoneConnected;
 
-    public static User from(UserDetail userDetail) {
+    public static User signUp(UserDetail userDetail) {
         return User.builder()
             .phone(userDetail.getPhoneNum())
             .status(UserStatus.NOT_SIGNED)
@@ -72,6 +72,7 @@ public class User extends BaseEntity {
             .isPhoneConnected(true)
 			.gender(userDetail.getGender())
 			.age(userDetail.getAge())
+            .userConfig(UserConfig.createDefault())
 			.build();
     }
 

@@ -35,7 +35,7 @@ public class UserService {
 	public User findOrCreateByUserJoin(UserDetail userDetail) {
 		UserDetail userDetailEncrypted = userDetail.encrypt();
 		return userRepository.findByPhone(userDetailEncrypted.getPhoneNum())
-			.orElseGet(() -> userRepository.save(User.from(userDetailEncrypted)));
+			.orElseGet(() -> userRepository.save(User.signUp(userDetailEncrypted)));
 	}
 
 	public int getLettersCountByPhoneNumber(String phoneNumber) {

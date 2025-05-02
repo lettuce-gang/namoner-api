@@ -109,4 +109,8 @@ public class User extends BaseEntity {
     public void updatePostBoxName(String postBoxName) {
         this.postboxName = postBoxName;
     }
+
+    public boolean isShowPostBox() {
+        return userConfig != null && userConfig.getShowPostbox();
+    }
 }
